@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+  
+    {% if user.patient.is_patient  %}
+        <center>
+            <h2>Consultation</h2>
+            {{consultation.status}}
+            {{payment.status}}
+            {{consultingpayment.payment.status}}
+            {{payment.consultationDateTime}}
+            {{user.patient.name}}
+            {{user.patient.username}}
+            {{consultation.consultingpayment.status}}
+        </center>
+        <div class="col">
+          <div class="container">
+            <button type="button"
+            class="btn btn-outline-secondary"
+            data-toggle="collapse"
+            data-target="#demo1">
+        Pay Consultation fee to Doctor {{ consultation.doctor.name }}
+    </button>
+              <div id="demo1" class="collapse">
+                  <form action="{% url 'make_payment' consultation.id %}" method="POST">
+                      {% csrf_token %}
+                      <div class="form-group mt-2">
+                          <h4 class="card-title">Doctor Name : {{ consultation.doctor.name }}</h4>
+                          <p class="card-text">
+                              Doctor Email:{{ consultation.doctor.user.email }}
+                          </p>
+                          <p class="card-text">
+                              Bank Name: {{ consultation.doctor.bank }}
+                          </p>
+                          <p class="card-text">
+                              Account Number:{{ consultation.doctor.accountno }}
+                          </p>
+                          <div class="form-row field-accountinfo">
+                              <div>
+                                  <label class="required">Bank Name:</label>
+                                  <input type="text" name="bank" value={{ consultation.doctor.bank }} maxlength="200"  required="">
+                              </div>
+                              <div>
+                                  <label class="required">Account Number</label>
+                                  <input type="text" name="accountno" value={{ consultation.doctor.accountno }}  required="">
+                              </div>
+                          </div>
+                          <label for="sel2">Pay Fee:</label>
+                          <div class="row">
+                              <div class="col-sm-2">
+                                  <select class="form-control" id="sel2" name="paying">
+                                      <option>
+                                          100
+                                      </option>
+                                      <option>
+                                          200
+                                      </option>
+                                      <option>
+                                          300
+                                      </option>
+                                      <option>
+                                          400
+                                      </option>
+                                      <option>
+                                          500
+                                      </option>
+                                      <option>
+                                          600
+                                      </option>
+                                      <option>
+                                          700
+                                      </option>
+                                      <option>
+                                          800
+                                      </option>
+                                      <option>
+                                          900
+                                      </option>
+                                      <option>
+                                          1000
+                                      </option>
+                                  </select>
+                              </div>
+                              <div class="col-sm-10">
+                                  <i class="material-icons" style="font-size:36px;color:yellow">star_half</i>
+                              </div>
+                          </div>
+                          {% comment %} <input type="boole" class="form-control"  id="comment3" name="status"></input> {% endcomment %}
+                          <br>
+                          <label for="comment">Description:</label>
+                          <textarea class="form-control" rows="5" id="comment2" name="description"></textarea>
+                          <label for="comment">Date:</label>
+                          <input type="time_date"
+                                 class="form-control"
+                                 id="comment3"
+                                 name="consultationDateTime">
+                      </input>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Pay</button>
+              </form>
+          </div>
+      </div>
+
+     
+        {% endif %}
+      
+
+{% endblock %}

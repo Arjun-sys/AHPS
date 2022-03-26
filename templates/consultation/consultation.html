@@ -1,0 +1,886 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+  
+    <style>
+       
+          .overlay {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: white;
+            overflow-x: hidden;
+            transition: 0.5s;
+          }
+          
+          .overlay-content {
+            position: relative;
+            top: 10%;
+            width: 100%;
+            text-align: center;
+            margin-top: 0px;
+          }
+          
+          .overlay a {
+            padding: 8px;
+            text-decoration: none;
+            font-size: 36px;
+            {% comment %} color: #818181; {% endcomment %}
+            display: block;
+            transition: 0.3s;
+          }
+          
+          .overlay a:hover, .overlay a:focus {
+            color: #f1f1f1;
+          }
+          
+          .overlay .closebtn {
+            position: absolute;
+            top: 40px;
+            right: 45px;
+            font-size: 60px;
+          }
+          
+          @media screen and (max-height: 450px) {
+            .overlay a {font-size: 20px}
+            .overlay .closebtn {
+            font-size: 40px;
+            top: 15px;
+            right: 35px;
+            }
+          }
+    #chat_window{
+
+      {% comment %} position: fixed; {% endcomment %}
+      max-height: 500px;
+      bottom: 4%;
+      top: 22%;
+      right: 10px;
+      max-width: 50%;
+      min-width: 50%;
+  
+
+    }
+
+
+   #chat_body{
+
+    position: relative;
+    
+  }
+
+  .online_icon{
+    position: absolute;
+    height: 15px;
+    width:15px;
+    background-color: #4cd137;
+    border-radius: 50%;
+    bottom: 0.2em;
+    right: 0.4em;
+    border:1.5px solid white;
+}
+.offline{
+    background-color: #c23616 !important;
+}
+    #chat-form {
+      position: absolute;
+      bottom: 1px;
+      float: bottom;
+      width: 95%;
+  }
+
+  .panel-heading{
+    position: relative;
+    background-color: #35a83b;
+    padding: 5px;
+    margin-bottom: 5px ;
+    color: #fff;
+  }
+
+  .panel-body {
+      overflow-y: scroll;
+      
+      max-height:400px;
+      width: auto;
+      top: 10px;
+      bottom: 20px;
+  }
+  
+body{
+  position: relative;
+  box-shadow: 0px 0px 20px 0px rgb(219, 218, 218) !important;
+  background-color: #5f94c21a !important;
+
+}
+
+.list-group-item {
+  display: block;
+  padding: 1px !important;
+
+}
+
+
+
+.container{max-width:1170px; margin:auto;}
+
+img{ max-width:100%;}
+
+.inbox_people {
+  background: #f8f8f8 none repeat scroll 0 0;
+  float: left;
+  overflow: hidden;
+  width: 40%; border-right:1px solid #c4c4c4;
+}
+.inbox_msg {
+  border: 1px solid #c4c4c4;
+  clear: both;
+  overflow: hidden;
+}
+
+
+
+
+.chat_ib h5{ font-size:15px; color:#464646; margin:0 0 8px 0;}
+.chat_ib h5 span{ font-size:13px; float:right;}
+.chat_ib p{ font-size:14px; color:#989898; margin:auto}
+.chat_img {
+  float: left;
+  width: 11%;
+}
+.chat_ib {
+  float: left;
+  width: 88%;
+}
+
+.chat_people{ overflow:hidden; clear:both;}
+.chat_list {
+  border-bottom: 1px solid #c4c4c4;
+  margin: 0;
+}
+.inbox_chat { height: 550px; overflow-y: scroll;}
+
+.active_chat{ background:#ebebeb;}
+
+.incoming_msg_img {
+  display: inline-block;
+  width: 6%;
+}
+.received_msg {
+  display: inline-block;
+  vertical-align: top;
+  width: 92%;
+ }
+ .received_withd_msg p {
+  background: #ebebeb none repeat scroll 0 0;
+  border-radius: 3px;
+  color: #646464;
+  font-size: 14px;
+  margin: 0;
+  width: 100%;
+}
+.time_date {
+  color: #747474;
+  display: block;
+  font-size: 12px;
+}
+.received_withd_msg { width: 57%;}
+.mesgs {
+  float: left;
+  width: 100%;
+}
+
+ .sent_msg li {
+  background: #1f778f none repeat scroll 0 0;
+  border-radius: 3px;
+  font-size: 14px;
+  margin: 0; color:#fff;
+  width:100%;
+  
+}
+
+.sent_msg {
+  float: right;
+  width: 46%;
+}
+.input_msg_write input {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  border: medium none;
+  color: #4c4c4c;
+  font-size: 15px;
+  min-height: 48px;
+  width: 100%;
+}
+
+.type_msg {border-top: 1px solid #c4c4c4;position: relative;}
+.msg_send_btn {
+  background: #05728f none repeat scroll 0 0;
+  border: medium none;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  font-size: 17px;
+  height: 33px;
+  position: absolute;
+  right: 0;
+  top: 11px;
+  width: 33px;
+}
+.msg_history {
+  height: 516px;
+  overflow-y: auto;
+}
+
+
+
+
+
+    </style>
+    <br>
+    {% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+        <a class="close" data-dismiss="alert">×</a> {{message}}
+        <img src="" style="display: none" onerror="(function(el){ setTimeout(function(){ $(el).parent().remove(); },2000 ); })(this);" />
+    </div>
+    {% endfor %}
+
+   
+    {% if user.patient.is_patient  %}
+       
+
+
+
+    {% if consultation.payment_completed == 0 and consultation.payment_completed == 0 and consultation.status == "closed" %}
+   
+        <div class="container">
+       
+       
+            <button type="button"
+            class="btn btn-outline-secondary"
+            data-toggle="collapse"
+            data-target="#demoR">
+        Send Report to {{ consultation.doctor.name }}
+    </button>
+ 
+  
+        <div class="container">
+            <div id="demoR" class="collapse">
+
+
+            <form action="{% url 'uploading_report' consultation.id %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+      {% for message in messages %}
+      <div class="alert alert-success" style="color: green">
+          <a class="close" data-dismiss="alert">×</a> {{message}}
+          <img src="" style="display: none" onerror="(function(el){ setTimeout(function(){ $(el).parent().remove(); },3000 ); })(this);" />
+      </div>
+      {% endfor %}
+                <div class="form-group mt-2">
+                   
+                
+                    <label for="comment">Medical History Reports:</label>
+                    <input  name="report_pics" type="file" accept="image/*" multiple class="form-control-file">
+                    {% comment %} <input type="file" name="report_pics"  accept="image/*" multiple> {% endcomment %}
+                   <label for="description">Reviews:</label>
+                    <textarea class="form-control" rows="10" id="comment" name="description"></textarea> 
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+        </div>
+    </div>
+   
+
+</div>
+
+        <div class="col">
+         
+          <div class="container">
+            <button type="button"
+            class="btn btn-outline-secondary"
+            data-toggle="collapse"
+            data-target="#demo1">
+        Pay Consultation fee Rs 200 to Doctor {{ consultation.doctor.name }}
+    </button>
+              <div id="demo1" class="collapse">
+                  <form action="{% url 'consultpayment' consultation.id %}" method="POST">
+                      {% csrf_token %}
+                      <div class="form-group mt-2">
+                          <h4 class="card-title">Dr. {{ consultation.doctor.name }}</h4>
+                          <p class="card-text">
+                              Email:{{ consultation.doctor.user.email }}
+                          </p>
+                          <p class="card-text">
+                              Bank Name: {{ consultation.doctor.bank }}
+                          </p>
+                          <p class="card-text">
+                              Account Number:{{ consultation.doctor.accountno }}
+                          </p>
+                          <div class="form-row field-accountinfo">
+                              <div>
+                                  
+                                  <input type="hidden" name="bank" value="{{ consultation.doctor.bank }}"   required="">
+                              </div>
+                              <div>
+                                 
+                                  <input type="hidden" name="accountno" value={{ consultation.doctor.accountno }}  required="">
+                              </div>
+                              <div>
+                               
+                                <input type="hidden" name="paying" value={{consultation.amount}} type="hidden" required="">
+                            </div>
+                          </div>
+                          {% comment %} <label for="sel2">Pay Fee:</label> {% endcomment %}
+                          {% comment %} <div class="row">
+                              <div class="col-sm-2">
+                                  <select class="form-control" id="sel2" name="paying">
+                                      <option>
+                                          100
+                                      </option>
+                                      <option>
+                                          200
+                                      </option>
+                                      <option>
+                                          300
+                                      </option>
+                                      <option>
+                                          400
+                                      </option>
+                                      <option>
+                                          500
+                                      </option>
+                                      <option>
+                                          600
+                                      </option>
+                                      <option>
+                                          700
+                                      </option>
+                                      <option>
+                                          800
+                                      </option>
+                                      <option>
+                                          900
+                                      </option>
+                                      <option>
+                                          1000
+                                      </option>
+                                  </select>
+                              </div> {% endcomment %}
+                              {% comment %} <div class="col-sm-10">
+                                  <i class="material-icons" style="font-size:36px;color:yellow">star_half</i>
+                              </div> {% endcomment %}
+                          </div>
+                          {% comment %} <input type="boole" class="form-control"  id="comment3" name="status"></input> {% endcomment %}
+                          <br>
+                          {% comment %} <label for="comment">Description:</label>
+                          <textarea class="form-control" rows="5" id="comment2" name="description"></textarea> {% endcomment %}
+                        
+                      <label for="sel10">Payment Method</label>
+                      <div class="row">
+                          <div class="col-sm-2">
+                              <select class="form-control" id="sel10" name="payment_method">
+                                  <option>
+                                     By Website
+                                  </option>
+                                  <option>
+                                      Esewa
+                                  </option>
+                                  <option>
+                                      Khalti
+                                  </option>
+                                  
+                              </select>
+                          </div>
+
+                  </div>
+                  <button type="submit" class="btn btn-primary">Pay</button>
+              </form>
+          </div>
+      </div>
+    
+
+ 
+        <br>
+     {% elif consultation.status == "active" %}
+            {% comment %} {% ifequal consultingpayment.status "Verified" %} {% endcomment %}
+            <div class="container-fluid h-100">
+                <div class="row justify-content-center h-100">
+                   
+                    <div class="col-md-8 col-xl-6 chat">
+                        <div class="card">
+                            <div class="card-header msg_head">
+                                <div class="d-flex bd-highlight">
+                                    <div class="img_cont">
+                                        {% if consultation.doctor.profile_pic  %}
+                                            {% if consultation.status == "active" %}
+                                            <a href="{% url 'dviewprofile' consultation.doctor.user.username %}">  <img class="rounded-circle user_img" src="{{consultation.doctor.profile_pic.url}}" alt="Profile Pic" style="width:100%;" /></a>
+                                             <span class="online_icon"></span> 
+                                            {% else %}
+                                            <a href="{% url 'dviewprofile' consultation.doctor.user.username %}">  <img class="rounded-circle user_img" src="{{consultation.doctor.profile_pic.url}}" alt="Profile Pic" style="width:100%;" /></a>
+                                           
+                                            {% endif %}
+                                        {% else %}
+                                            {% if consultation.status == "active" %}
+                                            <a href="{% url 'dviewprofile' consultation.doctor.user.username %}">  <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img"></a>
+                                            <span class="online_icon"></span>
+                                            {% else %}
+                                            <a href="{% url 'dviewprofile' consultation.doctor.user.username %}">  <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img"></a>
+                                         
+                                            {% endif%}
+                                        {% endif %}
+                                    </div>
+                                <div class="user_info">
+                                        
+                                        <span>{{ consultation.doctor.name }}</span>
+                                        <p class="card-text" style="color: green;">
+                                            {% if consultation.status == "active" %}
+                                            <p>
+                                                Active Now
+                                            </p>
+                                            {% else %}
+                                            <p>
+                                            Offline
+                                            {% endif %}
+                                         </p>
+                                    </div>
+                                    <span><i class="fa fa-phone-alt"></i></span>
+                                    <div class="video_cam">
+                                        <span><i class="fas fa-video"></i></span>
+                                <span><i class="fas fa-phone"></i></span>
+                                <span id="action_menu_btn"><i class="fa fa-info-circle"></i></span>
+                                    </div>
+                                </div>
+                               
+                                <div class="action_menu">
+                                    <ul>
+                                        <li>
+                                            <i class="fas fa-user-circle"></i><a href="{% url 'dviewprofile' consultation.doctor.user.username %}"> Profile</a>
+                                        </li>
+                                        <li>
+                                            <i class="fas fa-ban"><a href=" " data-toggle="collapse" data-target="#demo2">   Close</a></i>
+                                            <div id="demo2" class="collapse">
+                                                Are you sure to close consultation ?
+                                                <br>
+                                                <form action="{% url 'close_consultation' consultation.id %}" method="POST">
+                                                    {% csrf_token %}
+                                                    <button type="submit"
+                                                            class="btn btn-outline-success mr-2 mt-2"
+                                                            style="display:inline-block">
+                                                        Yes
+                                                    </button>
+                                                    <div class="btn btn-outline-danger mt-2"  data-toggle="collapse">
+                                                        NO
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <i class="fas fa-user-circle"></i><a href="{% url 'dviewprofile' consultation.doctor.user.username %}"
+   data-toggle="collapse"
+   data-target="#demo"> Give Rating and Reviews to {{ consultation.doctor.name }} </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="msg-list-div" class="card-body msg_card_body">
+                                <ul id="msg-list" class="list-group">
+                                    {% include 'consultation/chat_body.html' %}
+                                    <script>
+                                                  var chatlist = document.getElementById('msg-list-div');
+                                                  chatlist.scrollTop = chatlist.scrollHeight;
+                                    </script>
+                                </ul>
+                            </div>
+                            <div class="card-footer"  style="background-color:#4d6086">
+                                {% csrf_token %}
+                                <div class="input-group" id="chat-bottom">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
+                                    </div>
+                                    <textarea name="chat-msg"
+                                              id="chat-msg"
+                                              class="form-control type_msg"
+                                              placeholder="Type your message..."></textarea>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text send_btn" id="send"><i class="fas fa-location-arrow"></i></span>
+                                    </div>
+                                </div>
+                           
+                        </div>
+                            </div>
+                        </div>
+                    </div>
+               
+            
+            <div class="row">
+                <div class="container">
+                    <div id="demo2" class="collapse">
+                        Are you sure to close consultation ?
+                        <br>
+                        <form action="{% url 'close_consultation' consultation.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="btn btn-outline-success mr-2 mt-2"
+                                    style="display:inline-block">
+                                Yes
+                            </button>
+                            <div class="btn btn-outline-danger mt-2"  data-toggle="collapse">
+                                NO
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            
+                <div class="container">
+                   
+                    <div id="demo" class="collapse">
+                        <form action="{% url 'rate_review' consultation.id %}" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group mt-2">
+                                <label for="sel1">Rate (Out of 5):</label>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <select class="form-control" id="sel1" name="rating">
+                                            <option>
+                                                1
+                                            </option>
+                                            <option>
+                                                2
+                                            </option>
+                                            <option>
+                                                3
+                                            </option>
+                                            <option>
+                                                4
+                                            </option>
+                                            <option>
+                                                5
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-10">
+                                        <i class="material-icons" style="font-size:36px;color:yellow">star_half</i>
+                                    </div>
+                                </div>
+                                <br>
+                                <label for="comment">Reviews:</label>
+                                <textarea class="form-control" rows="5" id="comment" name="review"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="container">
+                    <div id="demo2" class="collapse">
+                        Are you sure to close consultation ?
+                        <br>
+                        <form action="{% url 'close_consultation' consultation.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="btn btn-outline-success mr-2 mt-2"
+                                    style="display:inline-block">Yes</button>
+                            <div class="btn btn-outline-danger mt-2"  data-toggle="collapse">NO</div>
+                        </form>
+                    </div>
+                </div>
+                {% comment %} <div class="container mt-4 ml-5 mr-5">
+    <button type="button" class="btn btn-outline-danger mb-4" data-toggle="collapse" data-target="#demo3">Start Consultation</button>
+    <div id="demo3" class="collapse">Are you sure to start consultation ?
+      <br>
+
+      <form action="{% url 'start_consultation' consultation.id %}" method="POST"> 
+        {% csrf_token %}
+      <button type="submit" class="btn btn-outline-success mr-2 mt-2" style="display:inline-block">Yes</button>
+   
+      <div class="btn btn-outline-danger mt-2"  data-toggle="collapse">NO</div>
+    </form>
+    </div>
+
+                </div>  {% endcomment %}
+               
+            </div>
+            <!-- col 1 ends here................................................ -->
+        </div>
+        {% elif consultation.status == "closed" and consultingpayment.status == "Verified" and consultation.payment_completed == 1 %}
+        <h1>Your request is being processed..You will be notified when your consultation appointment has been scheduled!!!Thank You!!!</h1>
+        {% elif consultation.status == "closed" and consultingpayment.status == "Pending" and consultation.payment_completed == 1 %}
+        <h1>Your payment is going to be verified.Stay tuned, you will be notified when your consultation is scheduled!!!Thank you!!!</h1>
+        {% elif consultation.payment_completed == 0 and consultation.amount == 200}
+        <h1>Your payment is going to be verified.Stay tuned, you will be notified when your consultation is scheduled!!!Thank you!!!</h1>
+   
+        {% else %}
+        <h1>Stay tuned, you will be notified when your consultation is scheduled!!!Thank you!!!</h1>
+        {% endif %}
+    {% elif user.doctor.is_doctor %}
+        
+        <br>
+        <div class="container-fluid h-100">
+            <div class="row justify-content-center h-100">
+
+                <div class="card mt-5 ml-5 mr-5 mb-5" style="width:25%">
+                    <div class="card-body col-xs-6 .col-sm-4">
+                        <h5 style="text-align:center" class="card-title">Predicted Disease</h5>
+                        <h3 style="text-align:center; color:red;" > {{ consultation.diseaseinfo.diseasename }}</h3>
+                        <p style="color:white;">
+                            Symptoms seen are
+                            <ul class="list-group">
+                                {% for i in consultation.diseaseinfo.symptomsname %}
+                           
+                                    <li class="list-group-item" style="background-color:aliceblue"> {{ forloop.counter }}. {{i}}</li>
+                                    
+                                {% endfor %}
+                            </ul>
+                        </p>
+                        <p style="color:white;">
+                            Confidence score is {{ consultation.diseaseinfo.confidence }} %
+                        </p>
+                      
+                       
+                        <p style="color:white;">
+                            Booking Date :{{ consultation.consultation_date }}
+                        </p>
+                        <p style="color:white;">
+                           
+                            Payment Status :{% ifequal consultation.payment_completed 1 %}
+                            <span style="color:#7CFC00;">Payment Received</span>
+                            {% else %}
+                            <span style="color:red;">Payment Not Received</span>
+                            {% endifequal %}
+                        </p>
+                        <p>
+                        <button class="btn btn-success "style="color:white;cursor:pointer" onclick="openNav()">&#9776;View Previous Medical Report</button>
+                        </p>
+
+
+
+                      
+                       
+                        
+                        <div id="myNav" class="overlay">
+                          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                          <div class="overlay-content">
+                      
+                              {% for i in report_obj %}
+                              {% if forloop.first %} 
+                              <div class="card row-5 text-center">
+                                <div class="card-header">
+                                    Previous Medical Records Of {{ i.patient.name }}
+                                </div>
+                                <div class="card-body">
+                             
+                                 
+                                  <p class="card-text" style="color:white;" >{{ i.description }}</p>
+                                 
+                                  {% comment %} <a href="#" class="btn btn-primary">View Reports</a> {% endcomment %}
+                                </div>
+                                <div class="card-footer" style="color:white;">
+                                    Submitted at {{ i.time }}
+                                </div>
+                              </div>
+                              {% endif %}
+                              {% endfor %}
+                            <div class="card-columns" id="pics">
+                               
+                                {% for i in report_obj %}
+                               
+                                    <a href="{{i.report_pics.url}}" download>
+                                        <img class="card" src="{{i.report_pics.url}}" alt="Previous Report" style="width:100%;"/>
+                                      </a>
+                                   
+                                
+                                {% endfor %}
+                                
+                               
+                              
+                               
+                              </div>
+                           
+                           
+                          </div>
+                        </div>
+                        
+                        
+                        
+                        
+                        <script>
+                        function openNav() {
+                          document.getElementById("myNav").style.width = "100%";
+                        }
+                        
+                        function closeNav() {
+                          document.getElementById("myNav").style.width = "0%";
+                        }
+                        </script>
+                             
+                        </body>
+                        </html>
+                        
+
+
+
+                    </div>
+                </div>
+               
+           
+
+               
+                <div class="col-md-8 col-xl-6 chat">
+                    <div class="card">
+                        <div class="card-header msg_head">
+                            <div class="d-flex bd-highlight">
+                                <div class="img_cont">
+                                    {% if consultation.patient.profile_pic  %}
+                                    <a href="{% url 'pviewprofile' consultation.patient.user.username  %}"> <img class="rounded-circle user_img" src="{{consultation.patient.profile_pic.url}}" alt="Profile Pic" style="width:100%;" /></a>
+                                        <span class="online_icon"></span>
+                                        {% else %}
+                                        <a href="{% url 'pviewprofile' consultation.patient.user.username  %}">   <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img"></a>
+                                        <span class="online_icon"></span>
+                                        {% endif %}
+                                </div>
+                            <div class="user_info">
+                                {% comment %} <span class="time_date">{{ obj.sender }}</span> {% endcomment %}
+                                <span>{{ consultation.patient.name }}</span>
+                               
+                                <p class="card-text" >
+                                   {% if consultation.status == "active" %}
+                                   <p style="color:#7CFC00;">
+                                       Active Now
+                                   </p>
+                                   {% else %}
+                                   <p >
+                                   Offline
+                                   {% endif %}
+                                </p>
+                            </div>
+                            <div class="video_cam">
+                                <span><i class="fas fa-video"></i></span>
+                                <span><i class="fas fa-phone"></i></span>
+                                <span id="action_menu_btn"><i class="fa fa-info-circle"></i></span>
+                            </div>
+                        </div>
+                       
+                        {% comment %} <span id="action_menu_btn"><i class="fas fa-ellipsis-v"></i></span> {% endcomment %}
+                        <div class="action_menu">
+                            <ul>
+                                <li>
+                                    <i class="fas fa-user-circle"></i><a href="{% url 'pviewprofile' consultation.patient.user.username  %}" style="color:white;"> Profile</a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-ban"><a href="" data-toggle="collapse" data-target="#demo2"style="color:white;" >&nbsp; &nbsp;&nbsp;Close</a></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="msg-list-div" class="card-body msg_card_body">
+                        <ul id="msg-list" class="list-group">
+                            {% include 'consultation/chat_body.html' %}
+                            <script>
+                                          var chatlist = document.getElementById('msg-list-div');
+                                          chatlist.scrollTop = chatlist.scrollHeight;
+                            </script>
+                        </ul>
+                    </div>
+                </div>
+                    <div class="card-footer"  style="background-color:#4d6086">
+                        {% csrf_token %}
+                        <div class="input-group" id="chat-bottom">
+                            <div class="input-group-append">
+                                <span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
+                            </div>
+                            <textarea name="chat-msg"
+                                      id="chat-msg"
+                                      class="form-control type_msg"
+                                      placeholder="Type your message..."></textarea>
+                            <div class="input-group-append">
+                                <span class="input-group-text send_btn" id="send"><i class="fas fa-location-arrow"></i></span>
+                            </div>
+                        </div>
+                   
+                </div>
+            </div>
+      
+        </div>    
+                <!-- col 1 ends here................................................ -->
+          
+        {% endif %}
+        <!-- row ends here................................................ -->
+      
+<script>
+
+  $('#send').click( function(event){
+    event.preventDefault();
+
+    $.ajax({
+        url :"{% url 'post' %}",
+        type : "POST",
+        data : { msgbox : $('#chat-msg').val(),
+        csrfmiddlewaretoken : $('input[name=csrfmiddlewaretoken]').val()
+       },
+
+        success : function(json){
+            console.log(json);
+            $('#chat-msg').val('');
+            $('#msg-list').append('');
+          
+        }
+    });
+
+
+
+});
+
+
+function getMessages(){
+  if (!scrolling) {
+    $.ajax({
+      url: "{% url 'chat_messages' %}",
+      type: "GET",
+     
+      success: function(messages) {
+        $('#msg-list').html(messages);
+        var chatlist = document.getElementById('msg-list-div');
+        chatlist.scrollTop = chatlist.scrollHeight;
+      }
+    });
+  }
+  scrolling = false;
+}
+
+var scrolling = false;
+
+$(function(){
+    $('#msg-list-div').on('scroll', function(){
+        scrolling = true;
+    });
+    refreshTimer = setInterval(getMessages, 2000);
+});
+
+$(document).ready(function() {
+
+  getMessages();
+  
+     $('#send').attr('disabled','disabled');
+     $('#chat-msg').keyup(function() {
+        if($(this).val() != '') {
+            $('#send').removeAttr('disabled');
+        }
+        else {
+            $('#send').attr('disabled','disabled');
+        }
+     });
+ });
+
+</script>
+{% comment %} <script>
+    $(document).ready(function(){
+        $('#action_menu_btn').click(function(){
+            $('.action_menu').toggle();
+        });
+            });
+</script> {% endcomment %}
+
+{% endblock %}

@@ -1,0 +1,293 @@
+{% comment %} 
+$borderWidth: 5px;
+$animationTime: .5s;
+$border-color-default: #efefef;
+$border-color-fill: #ffb43e;
+$size: 160px;
+$howManySteps: 100; //this needs to be even. 
+
+.progress {
+  width: $size;
+  height: $size;
+  line-height: $size;
+  background: none;
+  margin: 0 auto;
+  box-shadow: none;
+  position: relative;
+  &:after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: $borderWidth solid $border-color-default;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  > span {
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+  }
+  .progress-left {
+    left: 0;
+  }
+  .progress-bar {
+    width: 100%;
+    height: 100%;
+    background: none;
+    border-width: $borderWidth;
+    border-style: solid;
+    position: absolute;
+    top: 0;
+    border-color: $border-color-fill;
+  }
+  .progress-left .progress-bar {
+    left: 100%;
+    border-top-right-radius: ($size/2);;
+    border-bottom-right-radius: ($size/2);;
+    border-left: 0;
+    -webkit-transform-origin: center left;
+    transform-origin: center left;
+    //animation: loading-2 1.5s linear forwards 1.8s;
+  }
+  .progress-right {
+    right: 0;
+    .progress-bar {
+      left: -100%;
+      border-top-left-radius: ($size/2);;
+      border-bottom-left-radius: ($size/2);;
+      border-right: 0;
+      -webkit-transform-origin: center right;
+      transform-origin: center right;
+      //animation: loading-1 1.8s linear forwards;
+    }
+  }
+  .progress-value {
+    display: flex;
+    border-radius: 50%;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 20px;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    font-weight: 300;
+    div {
+      //margin-top: 10px;
+    }
+    span {
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+  }
+}
+
+/* This for loop creates the necessary css animation names 
+Due to the split circle of progress-left and progress right, we must use the animations on each side. 
+*/
+@for $i from 1 through $howManySteps {
+	$stepName: ($i*(100 / $howManySteps));
+
+	//animation only the left side if below 50%
+	@if $i <= ($howManySteps/2) { 
+		.progress[data-percentage="#{$stepName}"] {
+			.progress-right .progress-bar {
+				 animation: loading-#{$i} $animationTime linear forwards;
+			}
+			.progress-left .progress-bar {animation: 0;}
+		}
+	}
+	//animation only the right side if above 50%
+	@if $i > ($howManySteps/2)  {  
+		.progress[data-percentage="#{$stepName}"] {
+			.progress-right .progress-bar {
+				animation: loading-#{($howManySteps/2)} $animationTime linear forwards; //set the animation to longest animation
+			}
+			.progress-left .progress-bar {
+      animation: loading-#{$i - ($howManySteps/2)} $animationTime linear forwards $animationTime;
+    }
+		}
+	}
+}
+
+//animation
+@for $i from 1 through ($howManySteps/2) { 
+	$degrees: (180/($howManySteps/2));
+	$degrees: ($degrees*$i);
+	@keyframes loading-#{$i}{
+    0%{
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100%{
+        -webkit-transform: rotate($degrees);
+			transform: rotate(#{$degrees}deg);
+    }
+	}
+} {% endcomment %}
+
+
+
+ #predict{
+    position: static;
+    width: 100px;
+    padding: 5px;
+    text-align: center;
+        
+} 
+
+#predicted-data{
+  margin-top: 5% !important;
+  width: 40%;
+  background:rgba(3, 169, 244, 0.48);
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
+  text-shadow: -5px 5px 6px white;
+  box-shadow: 3px 1px 3px 0px #607D8B;
+  display:inline-block;
+      
+}
+
+
+
+#inputsym{
+   
+   position: fixed;
+   right: 100px;
+}
+
+.symptoms{
+  border:ridge rgb(150, 177, 199);
+  margin: 2px;
+  display: block ;
+  text-align: center;
+  padding: 0px !important;
+  
+  background-color: #fdffff;
+  text-shadow: 0px 1px 20px rgba(3, 169, 244, 0.78);
+  box-shadow: 0px 8px 16px 0px rgba(78, 191, 243, 0.05);
+ 
+}
+
+#symptoms-box{ 
+position: static;
+margin-top: 5%;
+margin-left: 20%;
+margin-right: 20%;
+text-align: center;
+
+background-color: #e9ecef !important;
+min-height: 300px;
+
+padding: 10px 10px 10px 10px;
+    
+}
+
+.card-body{
+  margin-left: auto ;
+  margin-right: auto ;
+  
+  
+}
+/*  ------------------------------------------------------------*/
+/* Dropdown Button */
+ .dropbtn {
+    position: relative;
+    left:50%;
+    width: 150px;
+    background-color: #green;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  } 
+   
+  /* Dropdown button on hover & focus */
+  .dropbtn:hover, .dropbtn:focus {
+    background-color: #2980B9;
+  }
+  
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    left:40%;
+    
+  } 
+  #container-dropdown{
+
+    
+    min-width: 700px;
+    min-height: 200px;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .drop-content {
+    left:10%;
+    right: 10%;
+    display: none;
+    background-color: #fdffff;
+    
+    text-shadow: 0px 1px 20px rgb(7, 97, 231);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    
+  }
+
+  
+.dropdown-item {
+  position: relative;
+  min-width: 100px ;    
+  text-align: center !important;
+  width: auto !important;
+  display:inline-block ;
+  cursor: pointer;         
+
+  clear: both;
+  text-align: center; 
+  border: 0; 
+
+  margin: 10px !important;
+  
+  background-color: #fdffff;
+  text-shadow: 0px 1px 20px rgba(3, 169, 244, 0.78);
+  box-shadow: 0px 8px 16px 0px rgba(3, 169, 244, 0.05);ro
+
+  line-height: 2;
+  padding: 4px !important;
+  
+}
+  
+  /* Links inside the dropdown 
+  .dropdown-content a {
+ 
+  }*/
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {background-color: rgb(90, 181, 241);
+  }
+
+  
+  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container
+   when the user clicks on the dropdown button) */
+  .show {display:inline-block;}
+
+
+  #searchbar{ 
+    {% comment %} margin-left: 25%;  {% endcomment %}
+    padding:10px; 
+    border-radius: 10px; 
+   
+    width: 100%; 
+} 
+
+  #searchbardiv{
+    padding:10px; 
+
+  }

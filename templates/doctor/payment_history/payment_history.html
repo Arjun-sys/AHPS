@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+          type="text/css"
+          rel="stylesheet">
+    <style>
+.center {
+text-align: center;
+}
+
+.pagination {
+display: inline-block;
+}
+
+.pagination a {
+color: black;
+float: left;
+padding: 8px 16px;
+text-decoration: none;
+transition: background-color .3s;
+border: 1px solid #ddd;
+margin: 0 4px;
+}
+
+.pagination a.active {
+background-color: #1b405a;
+color: white;
+border: 1px solid #1b405a;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+    </style>
+    <br>
+    <center>
+        <h2>Payment History</h2>
+    </center>
+    <div class="container  mt-5 mb-3">
+        <br>
+        <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>SN</th>
+                    <th>Sender</th>
+                    <th>Payment Method</th>
+                    <th>Payment Amount</th>
+                    <th>Bank</th>
+                    <th>Account No.</th>
+                    <th>Payment Date</th>
+                    <th>Payment Completion</th>
+                    <th>Payment Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in payment %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ i.patient.name }}</td>
+                        <td>{{ i.payment_method }}</td>
+                        <td>{{ i.consultation.amount }}</td>
+                        <td>
+                            {% if i.payment_method == "Esewa" or i.payment_method == "Khalti" %}
+                                <i class="fa fa-lock" aria-hidden="true"></i>
+                            {% else %}
+                                {{ i.bank }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if i.payment_method == "Esewa" or i.payment_method == "Khalti" %}
+                                <i class="fa fa-lock" aria-hidden="true"></i>
+                            {% else %}
+                                {{ i.accountno }}
+                            {% endif %}
+                        </td>
+                        <td>{{ i.time }}</td>
+                        <td>
+                            {% if i.payment_method == "By Website" %}
+                                <i class="fa fa-check" aria-hidden="true" style="color:green;"> Payment Completed</i>
+                            {% elif i.consultation.payment_completed and i.payment_method == "Esewa" or i.consultation.payment_completed and i.payment_method == "Khalti" %}
+                                <i class="fa fa-check" aria-hidden="true" style="color:green;"> Payment Completed</i>
+                            {% else %}
+                                <i class="fa fa-times" aria-hidden="true" style="color:red;">   Not Paid</i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if i.status == "Pending" %}
+                                <i class="fa fa-times" aria-hidden="true" style="color:red;">Pending</i>
+                            {% else %}
+                                <i class="fa fa-check" aria-hidden="true" style="color:green;">Verified</i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="center">
+            {% if payment.has_other_pages %}
+                <div class="pagination">
+                    {% if payment.has_previous %}
+                        <a href="?page1={{ payment.previous_page_number }}">&laquo;</a>
+                    {% else %}
+                        <span class="disabled"> <a>&laquo;</a></span>
+                    {% endif %}
+                    {% for i in payment.paginator.page_range %}
+                        {% if payment.number == i %}
+                            <a class="active">{{ i }} <span class="sr-only">(current)</span></a>
+                        {% else %}
+                            <a href="?page1={{ i }}">{{ i }}</a>
+                        {% endif %}
+                    {% endfor %}
+                    {% if payment.has_next %}
+                        <a href="?page1={{ payment.next_page_number }}">&raquo;</a>
+                    {% else %}
+                        <span class="disabled"> <a>&raquo;</a></span>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

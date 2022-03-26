@@ -1,0 +1,21 @@
+
+django==3.2.12 
+#django==3.0.3
+joblib==0.14.1
+scikit-learn==0.21.3
+psycopg2==2.8.4
+asgiref==3.2.10
+Pillow==7.2.0
+pytz==2020.1
+requests==2.22.0
+six==1.14.0
+sqlparse==0.3.1
+#pip install django-bootstrap-form
+#  pip install django-bootstrap-v4   
+#    pip install django-cors-headers  
+#       pip install django-rest-passwordreset
+#        pip install -U django-password-reset 
+#            pip3 install djangorestframework  
+#             pip install social-auth-app-django
+#             pip install transliterate
+#pip install django-ajaximage

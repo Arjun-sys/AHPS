@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <br>
+    <div class="container" styel="margin-top:300px;">
+        <center>
+            <h2>Doctor Profile</h2>
+            <div class="card" style="width:350px">
+                {% if user.doctor.profile_pic %}
+                    <img src="{{ user.doctor.profile_pic.url }}" alt="Profile Picture" style="width:100%;"/>
+                {% else %}
+                    <img class="card-img-top"
+                         src="{% static 'homepage/doctor.png' %}"
+                         alt="Card image"
+                         style="width:100%;">
+                {% endif %}
+                <div class="card-body">
+                    <h4 class="card-title">{{ user.doctor.name }}</h4>
+                    <p class="card-text">
+                        {{ user.email }}
+                    </p>
+                    <a class="btn btn-outline-info btn-block"
+                       href="{% url 'dconsultation_history' %}">Consultation Details</a>
+                    <br>
+                   <a id="links" class="btn btn-outline-info btn-block" href="{% url 'dpayment_history' %}">Payment Details</a><br> 
+                    {% comment %} <button class="btn btn-outline-info btn-block"
+                            data-toggle="modal"
+                            data-target="#myModal-feedback">
+                        Inform Patient
+                    </button> {% endcomment %}
+                  
+                    <a id="links"
+                       class="btn btn-outline-info btn-block"
+                       href="{% url 'dviewprofile' user.username %}">View Profile</a>
+                    <br>
+                </div>
+            </div>
+            <!-- The Modal -->
+            {% comment %} <div class="modal fade" id="myModal-feedback">
+                <div class="modal-dialog modal-xl ">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Feedbacks</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <form action="post_feedback" method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="comment">Description</label>
+                                    <textarea class="form-control" rows="5" id="feedback" name="feedback"></textarea>
+                                    <label for="comment">Appointed Consulatation Data and Time</label>
+                                    <input type="time_date"
+                                           class="form-control"
+                                           id="consultationDateTime"
+                                           name="consultationDateTime">
+                                </input>
+                            </div>
+                        </div>
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button id="submit"
+                                    type="submit"
+                                    class="btn btn-success"
+                                    data-dismiss="modal"
+                                    style="color: white;">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div> {% endcomment %}
+        </center>
+        {% comment %} <script>
+      $(document).ready(function() {
+    
+        $('#submit').click( function(event){
+      
+          $.ajax({
+              url :"{% url 'post_feedback' %}",
+              type : "POST",
+              data : { feedback : $('#feedback').val(),
+              csrfmiddlewaretoken : $('input[name=csrfmiddlewaretoken]').val()
+             },
+      
+              success : function(data){
+                  alert(data);
+              }
+          });
+      
+      
+      });
+          
+       });
+    
+        </script> {% endcomment %}
+    {% endblock %}

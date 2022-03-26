@@ -1,0 +1,471 @@
+{% extends "base.html" %}
+{% load static %}
+
+ 
+{% block content %}
+<link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+{% comment %} <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.5.2/minty/bootstrap.min.css" />  {% endcomment %}
+<style >
+ 
+
+ 
+  .online_icon{
+    position: absolute;
+    height: 15px;
+    width:15px;
+    background-color: #4cd137;
+    border-radius: 50%;
+    bottom: 0.2em;
+    right: 0.4em;
+    border:1.5px solid white;
+}
+
+
+ 
+
+  
+  
+
+  .menu {
+    background: #1b405a;
+    height: 100vh;
+    width: 240px;
+    position: fixed;
+    top: 0px;
+    left: 0;
+    z-index: 5;
+    outline: none;
+  }
+  .menu .avatar {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 5em 1em;
+    text-align: center;
+  }
+  .menu .avatar img {
+    width: 100px;
+    border-radius: 10%;
+    overflow: hidden;
+    border: 4px solid #ffea92;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
+  }
+  .menu .avatar h2 {
+    font-weight: normal;
+    margin-bottom: 0;
+  }
+  .menu ul {
+    list-style: none;
+    padding: 0.5em 0;
+    margin: 0;
+  }
+  .menu ul li {
+    padding: 0.5em 1em 0.5em 3em;
+    font-size: 0.95em;
+    font-weight: regular;
+    background-repeat: no-repeat;
+    background-position: left 15px center;
+    background-size: auto 20px;
+    transition: all 0.15s linear;
+    cursor: pointer;
+  }
+  .menu ul li.icon-dashboard {
+    background-image: url("http://www.entypo.com/images//gauge.svg");
+  }
+  .menu ul li.icon-customers {
+    background-image: url("http://www.entypo.com/images//briefcase.svg");
+  }
+  .menu ul li.icon-users {
+    background-image: url("http://www.entypo.com/images//users.svg");
+  }
+  .menu ul li.icon-calendar {
+    background-image: url("http://www.entypo.com/images//calendar.svg");
+  }
+
+  .menu ul li:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  .menu ul li:focus {
+    outline: none;
+  }
+  @media screen and (max-width: 900px) and (min-width: 400px) {
+    body {
+      padding-left: 90px;
+    }
+    .menu {
+      width: 90px;
+    }
+    .menu .avatar {
+      padding: 0.5em;
+      position: relative;
+    }
+    .menu .avatar img {
+      width: 60px;
+    }
+    .menu .avatar h2 {
+      opacity: 0;
+      position: absolute;
+      top: 50%;
+      left: 100px;
+      margin: 0;
+      min-width: 200px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.4);
+      transform: translate3d(-20px, -50%, 0);
+      transition: all 0.15s ease-in-out;
+    }
+    .menu .avatar:hover h2 {
+      opacity: 1;
+      transform: translate3d(0px, -50%, 0);
+    }
+    .menu ul li {
+      height: 60px;
+      background-position: center center;
+      background-size: 30px auto;
+      position: relative;
+    }
+    .menu ul li span {
+      opacity: 0;
+      position: absolute;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 0.2em 0.5em;
+      border-radius: 4px;
+      top: 50%;
+      left: 80px;
+      transform: translate3d(-15px, -50%, 0);
+      transition: all 0.15s ease-in-out;
+    }
+    .menu ul li span:before {
+      content: '';
+      width: 0;
+      height: 0;
+      position: absolute;
+      top: 50%;
+      left: -5px;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-right: 5px solid rgba(0, 0, 0, 0.5);
+      transform: translateY(-50%);
+    }
+    .menu ul li:hover span {
+      opacity: 1;
+      transform: translate3d(0px, -50%, 0);
+    }
+  }
+  @media screen and (max-width: 400px) {
+    body {
+      padding-left: 0;
+    }
+    .menu {
+      width: 230px;
+      box-shadow: 0 0 0 100em rgba(0, 0, 0, 0);
+      transform: translate3d(-230px, 0, 0);
+      transition: all 0.3s ease-in-out;
+    }
+    .menu .smartphone-menu-trigger {
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      left: 100%;
+      background: #5bc995;
+    }
+    .menu .smartphone-menu-trigger:before,
+    .menu .smartphone-menu-trigger:after {
+      content: '';
+      width: 50%;
+      height: 2px;
+      background: #fff;
+      border-radius: 10px;
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate3d(-50%, -50%, 0);
+    }
+    .menu .smartphone-menu-trigger:after {
+      top: 55%;
+      transform: translate3d(-50%, -50%, 0);
+    }
+    .menu ul li {
+      padding: 1em 1em 1em 3em;
+      font-size: 1.2em;
+    }
+    .menu:focus {
+      transform: translate3d(0, 0, 0);
+      box-shadow: 0 0 0 100em rgba(0, 0, 0, 0.6);
+    }
+    .menu:focus .smartphone-menu-trigger {
+      pointer-events: none;
+    }
+  }
+
+  .countdown.show .running {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-flow: wrap;
+      flex-flow: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.countdown.show .running timer {
+  font-size: 55px;
+  font-weight: 600;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  line-height: 1;
+  color: #8c0734;
+}
+
+.countdown.show .running timer .days,
+.countdown.show .running timer .hours,
+.countdown.show .running timer .minutes,
+.countdown.show .running timer .seconds{
+  width: 70px;
+  text-align: left;
+  margin: 0 7px;
+}
+
+@media (max-width: 480px) {
+  .countdown.show .running timer  {
+    font-size: 40px;
+  }
+  .countdown.show .running timer .days,
+  .countdown.show .running timer .hours,
+  .countdown.show .running timer .minutes,
+  .countdown.show .running timer .seconds {
+    width: 49px;
+  }
+}
+
+.countdown.show .running .labels{
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 14px;
+}
+
+.countdown.show .running .labels span{
+  width: 97px;
+  text-align: center;
+  margin: 0px 2px;
+}
+
+@media (max-width: 480px) {
+  .countdown.show .running .labels span{
+    width: 69px;
+  }
+}
+
+.countdown.show .running .text{
+  font-size: 20px;
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+.countdown.show .running button{
+  border: none;
+  background-color: black;
+  color: white;
+  border-radius: 25px;
+  padding: 10px 20px;
+  margin: 10px;
+}
+
+.countdown.show .running .break{
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
+  height: 0;
+}
+
+.countdown.show .ended{
+  display: none;
+  -ms-flex-flow: wrap;
+      flex-flow: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.countdown.show .ended .text{
+  font-size: 20px;
+}
+
+.countdown.show .ended button {
+  border: none;
+  background-color: #5a0000;
+  color: white;
+  border-radius: 25px;
+  padding: 10px 20px;
+  margin: 10px;
+}
+
+.countdown.show .ended .break{
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
+  height: 0;
+}
+.container { margin: 150px auto; }
+</style>
+
+
+<nav class="menu" tabindex="0">
+  <div class="smartphone-menu-trigger"></div>
+  <header class="avatar">
+    
+    {% if user.patient.profile_pic %}
+   
+    <img  src="{{puser.patient.profile_pic.url}}" alt="Profile Pic" />
+    
+{% else %}
+    <img class="card-img-top"
+         src="{% static 'homepage/patient.png' %}"
+         alt="Card image"
+         style="width:100%;">
+          {% endif %}
+          <span class="online_icon"></span>
+    <br><br>
+   
+    <h4>{{puser.patient.name}}</h4>
+  </header>
+  <ul>
+    <li tabindex="0" class="icon-dashboard"> <a style="color:white; text-decoration:none;" href="patient_ui"><span>Dashboard</span></a> </li>
+    <li tabindex="0" class="icon-calendar"> <a style="color:white; text-decoration:none;" href="pconsultation_history"><span>Cosultation History</span></a></li>
+    <li tabindex="0" class="icon-users"> <a style="color:white; text-decoration:none;" href="book_consultation"><span>View Doctors</span></a></li>
+    <li tabindex="0" class="icon-users"> <a style="color:white; text-decoration:none;" href="checkdisease"><span>Check Disease</span></a></li>
+    <li tabindex="0" class="icon-users"> <a style="color:white; text-decoration:none;" href="ppayment_history"><span>Payment History</span></a></li>
+    <li tabindex="0" class="icon-users"> <a style="color:white; text-decoration:none;" data-toggle="modal" data-target="#myModal5" ><span>Notification</span></a></li>
+  </ul>
+</nav>
+
+
+
+<div class="container" style="margin-top:100px;">
+<center>
+
+
+
+
+
+   
+
+            <div class="card" style="width:350px">
+              {% if user.patient.profile_pic %}
+              <img class="card-img-top rounded" src="{{puser.patient.profile_pic.url}}" alt="Profile Pic"/> 
+          {% else %}
+              <img class="card-img-top"
+                   src="{% static 'homepage/patient.png' %}"
+                   alt="Card image"
+                   style="width:100%;">
+          {% endif %}
+
+
+              
+                <div class="card-body">
+                  <h4 class="card-title">{{puser.patient.name}}</h4>
+                
+                 
+                 {% comment %} <td> <img src="{{puser.patient.profile_pic.url}}" alt="Profile Pic" height="100px" width="100px" /></td>  {% endcomment %}
+                  <p class="card-text">{{puser.email}}</p>
+                  <a id="links" class="btn btn-outline-info btn-block" href="{% url 'checkdisease' %}">Predict Disease </a><br>
+                  <a class="btn btn-outline-info btn-block" href="{% url 'pconsultation_history' %}">Consult With Doctor </a><br>
+                  
+                  <a class="btn btn-outline-info btn-block" href="{% url 'pviewprofile' puser.username %}">View Profile</a><br>
+                  <a class="btn btn-outline-info btn-block" data-toggle="modal" data-target="#myModal5"> Notification</a><br>
+
+                 
+                </div>
+              </div>
+            </center>
+</div>
+
+
+
+
+<!-- The Modal -->
+<div class="modal fade" id="myModal5">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Notifications</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+
+
+          {% for i in notification %}
+          
+  <div class="row" style="border-bottom: 1px solid #ccc;">
+    <div class="col">
+      <p class=""><mark>Sender</mark>: {{i.doctor.name}}</p>
+     </div>
+     <div class="col">
+      <p class=""><mark>Sent Time</mark>: {{i.time}}</p>
+     </div> 
+    <div class="col">
+     <p class=""><mark>Message</mark>: {{i.description}}</p>
+    </div>
+    <div class="col">
+      <p class=""><mark>Scheduled Time</mark>: {{i.consultationDateTime}}</p>
+      <center>
+        <input type="datetime-local" id="alarmTime" value="{{i.consultationDateTime|date:'d/m/Y H:i'}}"/>
+        <button type="button" onclick="setAlarm(this);" id="alarmButton" class="btn btn-success"><span class="glyphicon glyphicon-time"></span> Set Notification Alarm</button>
+      </center>
+      <br />
+      <div id="selectButton" style="display:none;">
+        <center>
+          <button onclick="snoozeAlarm();" class="btn btn-warning"><span class="glyphicon glyphicon-pause"></span> Snooze 5 minutes</button>
+          <button onclick="stopAlarm();" class="btn btn-danger"><span class="glyphicon glyphicon-stop"></span> Stop Alarm</button>
+        </center>
+      </div>
+    </div>
+     </div>
+  <div class="container">
+
+    <div class="jumbotron countdown show" data-Date="{{i.consultationDateTime|date:'Y/m/d H:i:s'}}">
+    
+    <div class="running">
+      <timer>
+       
+        <span class="days"></span>:<span class="hours"></span>:<span class="minutes"></span>:<span
+                class="seconds"></span>
+        </timer>
+        <div class="break"></div>
+        <div class="labels"><span>Days</span><span>Hours</span><span>Minutes</span><span>Seconds</span>
+        </div>
+        <div class="break"></div>
+        <div class="text">Time remaining for consultation</div>
+        <div class="break"></div>
+        <button type="button" class="close" data-dismiss="modal">Close</button>
+    </div>
+  
+    <div class="ended">
+        <div class="text"><a class="btn btn-outline-info btn-block" href="{% url 'consultationview' i.consultation.id %}">Consult With Doctor {{i.doctor.name}} </a></div>
+        <div class="break"></div>
+        {% comment %} <button>Suscribe for next event!</button> {% endcomment %}
+    </div>
+  </div>
+  
+  
+</div>
+<br>
+
+
+          {% endfor %}
+      
+  </div>
+      
+
+
+    </div>
+
+
+    
+      <script src="{% static 'patient/patient_ui/script.js' %}"></script> 
+      <script src="{% static 'patient/patient_ui/timer.js' %}"></script> 
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> 
+{% endblock %}

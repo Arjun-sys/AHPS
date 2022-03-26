@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Add icon library -->
+<link rel="stylesheet" href="{% static 'doctor/signup_form/signup.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+
+
+    
+  
+    
+  .profile-pic-div{
+     cursor: pointer;
+      height: 200px;
+      width: 200px;
+      {% comment %} position: absolute; {% endcomment %}
+      margin-top: -900px;
+      margin-bottom:0px;
+      margin-left: -200px;
+      transform: translate(-50%,-50%);
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid grey;
+  }
+  
+  #photo{
+      height: 100%;
+      width: 100%;
+  }
+  
+  #file{
+      display: none;
+       cursor: pointer;
+  }
+  
+  #uploadBtn{
+      height: 40px;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      background: rgba(0, 0, 0, 0.7);
+      color: wheat;
+      line-height: 30px;
+      font-family: sans-serif;
+      font-size: 15px;
+      cursor: pointer;
+      display: none;
+  }
+  </style>
+    
+
+<form action='signup_doctor' method="POST" style="max-width:500px;max-height:1600px;margin:auto;margin-top:100px;" enctype="multipart/form-data">
+
+  <h1></b><center>SIGN UP</center></b></h1>
+  
+  {% csrf_token %}
+  
+
+      {% for message in messages %}
+      <div class="alert alert-success" style="color: red">
+          <a class="close" data-dismiss="alert">×</a> {{message}}
+          <img src="" style="display: none" onerror="(function(el){ setTimeout(function(){ $(el).parent().remove(); },3000 ); })(this);" />
+      </div>
+      {% endfor %}
+
+  <div class="input-container">
+    <i class="fa fa-user icon"></i>
+    <input class="input-field" type="text" placeholder="Username" name="username" required>
+  </div>
+
+
+  <div class="input-container">
+    <i class="fa fa-user icon"></i>
+    <input class="input-field" type="text" placeholder="Name" name="name" required>
+  </div>
+
+  <div class="input-container">
+    <i class="fa fa-envelope icon"></i>
+    <input class="input-field" type="text" placeholder="Email" name="email" required>
+  </div>
+  
+
+
+   <div class="input-container">
+    <i class="fa fa-calendar icon"> DOB</i>
+    <input class="input-field" type="date"  placeholder="Date-of-birth" name="dob"  required>
+  </div>
+  <div class="input-container">
+    <i class="fa fa-birthday-cake icon"></i>
+    <input class="input-field" type="number" placeholder="Age" name="age" required>
+  </div>
+  
+  <div class="input-container">
+  <i class="fa fa-genderless icon"></i>
+  <input class="radio-btn" type="radio" name="gender" value="male" checked> Male 
+  <input class="radio-btn" type="radio" name="gender" value="female"> Female
+  <input class="radio-btn" type="radio" name="gender" value="other"> Other 
+ 
+  </div>
+  
+  
+  <div class="input-container">
+    <i class="fa fa-address-book icon"></i>
+    <input class="input-field" type="text" placeholder="Address" name="address" required>
+  </div>
+  <div class="input-container">
+    <i class="fa fa-phone icon"></i>
+    <input class="input-field" type="number" placeholder="Mobile" name="mobile" required>
+  </div>
+  
+ 
+  
+
+  <div class="input-container">
+  <i class="fa fa-id-card-o icon"></i>
+    <input class="input-field" type="text" placeholder="Registration Number" name="registration_no" required>
+  </div>
+
+  <div class="input-container">
+    <i class="fa fa-calendar icon"> 
+      Year Of Registration</i>
+    <input class="input-field" type="date" placeholder="Year of registration" name="year_of_registration"  required>
+  </div>
+
+  <div class="input-container">
+    <i class="fa fa-user-md icon"></i>
+    <input class="input-field" type="text" placeholder="Qualification" name="qualification" required>
+  </div>
+
+
+  <div class="input-container">
+    <i class="fa fa-users icon"></i>
+    <input class="input-field" type="text" placeholder="Practicing Hospital" name="practicinghospital" required>
+  </div>
+
+
+  <div class="input-container">
+    <i class="fa fa-address-book icon"></i>
+ 
+          <select name="specialization" class="input-field" >
+              <option disabled="disabled" selected="selected">Specialization</option>
+              <option>Rheumatologist</option>
+              <option>Cardiologist</option>
+              <option>ENT specialist</option>
+              <option>Orthopedist</option>
+              <option>Neurologist</option>
+              <option>Allergist/Immunologist</option>
+              <option>Urologist</option>
+              <option>Dermatologist</option>
+              <option>Gastroenterologist</option>
+              <option>Other</option>
+          </select>
+          <div class="select-dropdown"></div>
+  </div>
+
+
+  <div class="input-container">
+    <i class="fa fa-user-md icon">Appointment Start Time</i>
+    <input class="input-field" type="Time" placeholder="Consultation Start Time" name="start_time" required>
+  </div>
+
+  <div class="input-container">
+    <i class="fa fa-user-md icon">Appointment End Time</i>
+    <input class="input-field" type="time" placeholder="Consultation End Time" name="end_time" required>
+  </div>
+<h5>Bank Details</h5>
+<div class="input-container">
+  <i class="fa fa-users icon"></i>
+  <input class="input-field" type="text" placeholder="Bank Name" name="bank" required>
+</div> 
+<div class="input-container">
+    <i class="fa fa-id-card-o icon"></i>
+      <input class="input-field" type="text" placeholder="Account Number" name="accountno" required>
+    </div>
+
+  
+
+  <div class="input-container">
+    <i class="fa fa-key icon"></i>
+    <input class="input-field" type="password" placeholder="Password" name="password" required>
+  </div>
+  
+  <div class="input-container">
+    <i class="fa fa-check icon"></i>
+    <input class="input-field" type="password" placeholder="Retype Password" name="password1" required>
+  </div>
+
+  <div class="profile-pic-div">
+    <img  src="{% static 'homepage/image.jpg' %}" id="photo">
+    <input type="file" id="file" name="profile_pic" accept="image/*" >
+    <label for="file" id="uploadBtn" styel><i class="fa fa-plus" aria-hidden="true"></i></label>
+  </div>
+  <br>
+  <br>  <br>  <br>  <br>
+  <br>
+  <br>  <br>  <br>  <br>
+  <br>  <br>  <br>  <br>
+  <br>
+  <br>  <br>  <br>  <br>
+  <br>
+  <br>  <br>  <br>  <br>
+  <br>  <br>  <br>  <br>
+  <br>
+  
+
+
+  <button type="submit" class="btn">Register</button>
+</form>
+<script>
+
+
+  //declearing html elements
+  
+  const imgDiv = document.querySelector('.profile-pic-div');
+  const img = document.querySelector('#photo');
+  const file = document.querySelector('#file');
+  const uploadBtn = document.querySelector('#uploadBtn');
+  
+  //if user hover on img div 
+  
+  imgDiv.addEventListener('mouseenter', function(){
+      uploadBtn.style.display = "block";
+  });
+  
+  //if we hover out from img div
+  
+  imgDiv.addEventListener('mouseleave', function(){
+      uploadBtn.style.display = "none";
+  });
+  
+  //lets work for image showing functionality when we choose an image to upload
+  
+  //when we choose a foto to upload
+  
+  file.addEventListener('change', function(){
+      //this refers to file
+      const choosedFile = this.files[0];
+  
+      if (choosedFile) {
+  
+          const reader = new FileReader(); //FileReader is a predefined function of JS
+  
+          reader.addEventListener('load', function(){
+              img.setAttribute('src', reader.result);
+          });
+  
+          reader.readAsDataURL(choosedFile);
+  
+        
+      }
+  });
+  
+      </script>
+
+{% endblock %}

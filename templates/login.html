@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% load static %}
+
+ 
+{% block content %}
+  
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+    <!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="{% static 'signin_page/images/icons/favicon.ico' %}"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'signin_page/vendor/bootstrap/css/bootstrap.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'signin_page/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'signin_page/fonts/iconic/css/material-design-iconic-font.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'signin_page/vendor/animate/animate.css' %}">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="{% static 'signin_page/vendor/css-hamburgers/hamburgers.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'signin_page/vendor/animsition/css/animsition.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'signin_page/vendor/select2/select2.min.css' %}">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="{% static 'signin_page/vendor/daterangepicker/daterangepicker.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'signin_page/css/util.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'signin_page/css/main.css' %}">
+<!--===============================================================================================-->
+
+
+
+body {font-family: Arial, Helvetica, sans-serif;}
+form {border: 3px solid #f1f1f1;}
+
+#box{
+   width:30%;
+   height:30%;
+}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+</style>
+
+
+
+
+  <div class="container" id="box" >
+<center>
+<h2>Login</h2>
+</center>
+<form action="login" method="post">
+  
+  {% csrf_token %}
+  <div class="imgcontainer">
+    <img src="{% static 'admin/signin/admin.png' %}" alt="Avatar" class="avatar">
+  </div>
+
+
+{% comment %} 
+  <center>
+    <div>
+      {% for message in messages %}
+      <h3 style="color: red;">{{message}}</h3>
+      {% endfor %}
+    </div>
+    </center> {% endcomment %}
+    <br>
+    
+  <div class="container">
+    <label for="uname"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="username" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="password" required>
+    <div class="text-right p-t-8 p-b-31">
+      <p>Forgot Password?<a href="{% url 'passworforgot' %}">Reset now.</a></p>
+    </div>
+  {% for message in messages %}
+  <div class="alert alert-success" style="color: red">
+      <a class="close" data-dismiss="alert">×</a> {{message}}
+      <img src="" style="display: none" onerror="(function(el){ setTimeout(function(){ $(el).parent().remove(); },3000 ); })(this);" />
+  </div>
+  {% endfor %}
+        
+    <button type="submit">Signin</button>
+
+    <div class="txt1 text-center p-t-54 p-b-20">
+        <span>
+            Or Sign In Using
+        </span>
+    </div>
+
+    <div class="flex-c-m">
+        <a href="{% url "social:begin" "facebook" %}" class="login100-social-item bg1">
+            <i class="fa fa-facebook"></i>
+        </a>
+
+        <a href="#" class="login100-social-item bg2">
+            <i class="fa fa-twitter"></i>
+        </a>
+
+        <a href="#" class="login100-social-item bg3">
+            <i class="fa fa-google"></i>
+        </a>
+    </div>
+    <label>
+      <input type="checkbox" checked="checked" name="remember"> Remember me
+    </label>
+  </div>
+
+ 
+</form>
+
+</div>
+
+	
+<!--===============================================================================================-->
+<script src="{% static 'signin_page/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'signin_page/vendor/animsition/js/animsition.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'signin_page/vendor/bootstrap/js/popper.js' %}"></script>
+	<script src="{% static 'signin_page/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'signin_page/vendor/select2/select2.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'signin_page/vendor/daterangepicker/moment.min.js' %}"></script>
+	<script src="{% static 'signin_page/vendor/daterangepicker/daterangepicker.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'signin_page/vendor/countdowntime/countdowntime.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'signin_page/js/main.js' %}"></script>
+
+ {% endblock %}
+

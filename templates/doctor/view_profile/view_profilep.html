@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% load static %}
+
+ 
+	{% block content %}
+
+
+  <link rel="stylesheet" href="{% static 'doctor/view_profile/forms.css' %}">
+  <link rel="stylesheet" href="{% static 'doctor/view_profile/responsive.css' %}">
+  <link rel="stylesheet" href="{% static 'doctor/view_profile/base.css' %}">
+
+
+
+
+    <!-- Content -->
+    <div id="content" class="colM">
+        
+        <div id="content-main">
+
+<fieldset class="module aligned " >
+
+<div class="border border-dark rounded-lg mx-auto mt-3 " style="width:600px">
+
+<div class="container mt-3 "  >
+
+  <div class="mx-auto text-center"><h2 >          Doctor Profile:{{ duser.doctor.name }} </h2> 
+  </div>
+
+
+
+
+    
+<div class="form-row field-name">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_name">Name:</label>
+            
+                {{duser.doctor.name}} 
+            
+        
+        
+    </div>
+
+</div>
+
+
+
+<div class="form-row field-email">
+
+
+        <div>
+            
+            
+                <label class="required" for="id_email">Email:</label>
+                
+                   {{duser.email}} 
+                
+            
+            
+        </div>
+    
+    </div>
+    
+
+<div class="form-row field-dob">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_dob">Dob:</label>
+            
+                {{duser.doctor.dob|date:'Y-m-d'}}
+  </div>
+
+</div>
+{% comment %} 
+<div class="form-row field-img">
+
+
+    <div>
+        
+        
+            <label for="id_img">Img:</label>
+            
+                <input type="file" name="img" accept="image/*" id="id_img">
+            
+        
+        
+    </div>
+
+</div> {% endcomment %}
+
+<div class="form-row field-address">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_address">Address:</label>
+            
+                {{duser.doctor.address}}
+            
+        
+        
+    </div>
+
+</div>
+
+<div class="form-row field-mobile_no">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_mobile_no">Mobile no:</label>
+            
+                {{duser.doctor.mobile_no}} 
+            
+        
+        
+    </div>
+
+</div>
+
+<div class="form-row field-gender">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_gender">Gender:</label>
+            
+               {{duser.doctor.gender}} 
+            
+        
+        
+    </div>
+
+</div>
+
+<div class="form-row field-registration_no">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_registration_no">Registration no:</label>
+            
+               {{duser.doctor.registration_no}} 
+            
+        
+        
+    </div>
+
+</div>
+{% comment %} 
+<div class="form-row field-year_of_registration">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_year_of_registration">Year of registration:</label>
+            
+               {{duser.doctor.year_of_registration|date:'Y-m-d'}} 
+  </div>
+</div> {% endcomment %}
+
+
+<div class="form-row field-qualification">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_qualification">Qualification:</label>
+            
+              {{duser.doctor.qualification}} 
+            
+        
+        
+    </div>
+
+</div>
+
+<div class="form-row field-practicinghospital">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_practicinghospital">Practicing Hospital:</label>
+            {{duser.doctor.practicinghospital}} 
+            
+        
+        
+    </div>
+
+</div>
+
+<div class="form-row field-specialization">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_specialization">Specialization:</label>
+            
+              {{duser.doctor.specialization}}
+            
+        
+        
+    </div>
+
+</div>
+
+
+</div>
+
+
+</fieldset>
+
+
+<div class="container">
+        
+    <br>   
+<h2>Ratings and Reviews</h2>
+<br>
+        <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Patient name</th>
+                    <th>Ratings</th>
+                    <th>Reviews</th>
+                  </tr>
+                </thead>
+                <tbody>
+                        {% for i in rate %}
+               <tr>
+                    <td>{{i.patient.name}}</td>
+                    <td>{{i.rating}}/5</td>
+                    <td>{{i.review}}</td>
+               </tr>
+                 
+     {% endfor %}
+                </tbody>
+              </table>
+</div>
+
+
+    </div>
+
+ </div>
+    <!-- END Content -->
+
+</div>
+<!-- END Container -->
+
+
+  
+{% endblock %}

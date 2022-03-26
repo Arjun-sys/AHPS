@@ -1,0 +1,621 @@
+{% extends "base.html" %}
+{% load static %}
+
+ 
+	{% block content %}
+
+
+  <link rel="stylesheet" href="{% static 'doctor/view_profile/forms.css' %}">
+  <link rel="stylesheet" href="{% static 'doctor/view_profile/responsive.css' %}">
+  <style>
+
+
+    
+  
+    
+    .profile-pic-div{
+       cursor: pointer;
+        height: 200px;
+        width: 200px;
+        {% comment %} position: absolute; {% endcomment %}
+        margin-top: 100px;
+     
+        margin-left: -200px;
+        transform: translate(-50%,-50%);
+        border-radius: 50%;
+        overflow: hidden;
+        border: 1px solid grey;
+    }
+    
+    #photo{
+        height: 100%;
+        width: 100%;
+    }
+    
+    #file{
+        display: none;
+         cursor: pointer;
+    }
+    
+    #uploadBtn{
+        height: 40px;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        background: rgba(0, 0, 0, 0.7);
+        color: wheat;
+        line-height: 30px;
+        font-family: sans-serif;
+        font-size: 15px;
+        cursor: pointer;
+        display: none;
+    }
+    </style>
+      
+  {% comment %} <link rel="stylesheet" href="{% static 'doctor/view_profile/base.css' %}"> {% endcomment %}
+
+
+
+
+
+
+    <!-- Content -->
+<div id="content" class="colM">
+        
+<div id="content-main" style="margin-top:100px;">
+
+<fieldset class="module aligned " >
+
+<div class="border border-dark rounded-lg mx-auto mt-3 " style="width:600px" >
+
+<div class="container mt-3 " style="margin-top:100px;" >
+
+  <div class="mx-auto text-center">
+      <h2 >{{ duser.doctor.name }} </h2>
+  </div>
+
+
+
+
+  <div class="form-row field-username">
+
+
+        <div>
+            
+            
+                <label class="required" for="id_username">username:</label>
+                
+                    <input type="text" name="username" value={{duser.username}} class="vTextField" maxlength="50" required="" id="id_username">
+                
+            
+            
+        </div>
+    
+    </div>
+
+    
+<div class="form-row field-name">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_name">Name:</label>
+            
+                <input type="text" name="name" value="{{duser.doctor.name}}" class="vTextField" maxlength="50" required="" id="id_name">
+            
+        
+        
+    </div>
+
+</div>
+
+
+
+<div class="form-row field-email">
+
+
+        <div>
+            
+            
+                <label class="required" for="id_email">Email:</label>
+                
+                    <input type="text" name="email" value={{duser.email}} class="vTextField" maxlength="100" required="" id="id_email">
+                
+            
+            
+        </div>
+    
+    </div>
+    
+
+<div class="form-row field-dob">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_dob">Dob:</label>
+            
+                <input type="text" name="dob" value={{duser.doctor.dob|date:'Y-m-d'}} class="vDateField" size="10" required="" id="id_dob">
+  </div>
+
+</div>
+
+
+
+{% comment %} 
+
+<div class="form-row field-img">
+
+
+    <div>
+        
+        
+        <div>
+      
+      
+            
+            {% if duser.doctor.profile_pic %}
+            <td> <img src="{{duser.doctor.profile_pic.url}}" alt="Profile Pic" height="100px" width="100px" /></td> 
+            {% endif %}
+                <input type="file" name="profile_pic" accept="image/*" id="id_profile_pic">
+            
+        
+        
+    </div>
+        
+        
+    </div>
+
+</div> {% endcomment %}
+{% comment %} <div class="form-row field-img">
+  
+<div class="profile-pic-div">
+   
+   {% if duser.doctor.profile_pic %} 
+    <img  src="{{duser.doctor.profile_pic.url }}" id="photo" alt="Profile Pic" height="100px" width="100px">
+
+    {% else %} 
+    <img  src="{% static 'homepage/image.jpg' %}" id="photo">
+    {% endif %}
+    <input type="file" id="file" name="profile_pic" accept="image/*" >
+    <label for="file" id="uploadBtn" styel><i class="fa fa-plus" aria-hidden="true"></i></label>
+  </div>
+</div>
+        
+         {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+<div class="form-row field-address">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_address">Address:</label>
+            
+                <input type="text" name="address" value={{duser.doctor.address}} class="vTextField" maxlength="100" required="" id="id_address">
+            
+        
+        
+    </div>
+
+</div>
+
+<div class="form-row field-mobile_no">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_mobile_no">Mobile no:</label>
+            
+                <input type="text" name="mobile_no" value={{duser.doctor.mobile_no}} class="vTextField" maxlength="15" required="" id="id_mobile_no">
+            
+        
+        
+    </div>
+
+</div>
+
+<div class="form-row field-gender">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_gender">Gender:</label>
+            
+                <input type="text" name="gender" value={{duser.doctor.gender}} class="vTextField" maxlength="10" required="" id="id_gender">
+            
+        
+        
+    </div>
+
+</div>
+
+<div class="form-row field-registration_no">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_registration_no">Registration no:</label>
+            
+                <input type="text" name="registration_no" value={{duser.doctor.registration_no}} class="vTextField" maxlength="20" required="" id="id_registration_no">
+            
+        
+        
+    </div>
+
+</div>
+
+<div class="form-row field-year_of_registration">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_year_of_registration">Year of registration:</label>
+            
+                <input type="text" name="year_of_registration" value={{duser.doctor.year_of_registration|date:'Y-m-d'}} class="vDateField" size="10" required="" id="id_year_of_registration">
+  </div>
+</div>
+
+
+<div class="form-row field-qualification">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_qualification">Qualification:</label>
+            
+                <input type="text" name="qualification" value={{duser.doctor.qualification}} class="vTextField" maxlength="20" required="" id="id_qualification">
+            
+        
+        
+    </div>
+
+</div>
+
+<div class="form-row field-practicinghospital">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_practicinghospital">Practicing Hospital:</label>
+            
+                <input type="text" name="State_Medical_Council" value="{{duser.doctor.practicinghospital}}" class="vTextField" maxlength="200" required="" id="id_practicinghospital">
+            
+        
+        
+    </div>
+
+</div>
+
+<div class="form-row field-accountinfo">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_bank">Bank Name:</label>
+            
+                <input type="text" name="bank" value="{{duser.doctor.bank}}" class="vTextField" maxlength="200" required="" id="id_bank">
+            
+        
+        
+    </div>
+    <div>
+        
+        
+        <label class="required" for="id_accountno">Account Number</label>
+        
+            <input type="text" name="accountno" value={{duser.doctor.accountno}} class="vTextField" maxlength="200" required="" id="id_accountno">
+        
+    
+    
+</div>
+
+</div>
+
+
+<div class="form-row field-specialization">
+
+
+    <div>
+        
+        
+            <label class="required" for="id_specialization">Specialization:</label>
+            
+                <input type="text" name="specialization" value={{duser.doctor.specialization}} class="vTextField" maxlength="30" required="" id="id_specialization">
+            
+        
+        
+    </div>
+    
+    <div>
+        
+        
+        <label class="required" for="id_start_time">Consultation Start Time:</label>
+        
+            <input type="text" name="start_time" value="{{duser.doctor.start_time}}" class="vTextField"  required="" id="id_start_time">
+        
+    
+    
+</div>
+ 
+<div>
+        
+        
+    <label class="required" for="id_end_time">Consultation End Time:</label>
+    
+        <input type="text" name="end_time" value="{{duser.doctor.end_time}} " class="vTextField"  required="" id="id_end_time">
+    
+
+
+</div>
+
+</div>
+
+
+<div class="form-row field-rating">
+
+
+        <div>
+            
+            <label class="required" for="Rating">Rating:<span id=stars></span>  </label>
+            
+        </div>     
+        
+        <input type="text" style="color:red;" name="rating" id="ratingr"  class="vTextField" value="{{ duser.doctor.rating|floatformat:2 }}" disabled></input>      
+                   
+        {% comment %} {% if rate %}
+            {% for i in rate %}
+            {% if forloop.first %}
+           
+            <input type="text" style="color:red;" name="end_time"  class="vTextField" value="{{ i.rating_is }}" disabled></input>
+            {% endif %}
+           
+            {% endfor %}
+            {% else %}
+            No rating yet!!!
+            
+            {% endif %} {% endcomment %}
+     
+    
+</div>
+<div class="form-row field-total-earned">
+
+
+    <div>
+        
+        
+            <label class="required" for="paying">Total Earned:</label>
+            
+                <input style="green;" type="text" name="paying" value="Rs.{{duser.doctor.paying}}" class="vTextField" maxlength="200" required="" id="id_paying" disabled>
+            
+                <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+               
+        
+    </div>
+
+</div>
+<div class="profile-pic-div">
+   
+    {% if duser.doctor.profile_pic %} 
+     <img  src="{{duser.doctor.profile_pic.url }}" id="photo" >
+ 
+     {% else %} 
+     <img  src="{% static 'homepage/image.jpg' %}" id="photo">
+     {% endif %}
+     <input type="file" id="file" name="profile_pic" accept="image/*" >
+    
+     <label for="file" id="uploadBtn" styel><i class="fa fa-plus" aria-hidden="true"></i></label>
+   </div>
+
+{% if request.user.doctor %}
+
+
+            <div class="comtainer mt-3 mb-3 ml-4 mr-4">
+              
+                <div class="btn-group">
+                  <button type="button" class="btn btn-secondary pr-4 pl-4 mr-5 ml-5 " data-toggle="collapse" data-target="#save">Edit</button>
+                  <div id="save" class="collapse ml-5 mr-5">
+                   
+                    <button type="button"  id="save" class="btn btn-success pr-4 pl-4 mr-5 ml-5 ">Save</button>
+                    </div>
+                 
+                </div>
+                
+            </div>
+      {% endif %}
+
+
+</div>
+
+
+</fieldset>
+
+
+<div class="container">
+        
+    <br>   
+<h2>Ratings and Reviews</h2>
+<br>
+        <table class="table table-striped">
+                <thead>
+                  <tr>
+                  
+                      <th>SN.</th>
+                    <th>Patient name</th>
+                    <th>Ratings</th>
+                    <th>Reviews</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    
+                {% for i in rate %}
+               <tr>
+                  
+                  <td>{{forloop.counter}}</td>
+                    <td>{{i.patient.name}}</td>
+                    <td>{{i.rating}}/5</td>
+                    <td>{{i.review}}</td>
+                   
+               </tr>
+            
+                {% endfor %}
+                
+                </tbody>
+              </table>
+</div>
+
+
+    </div>
+
+ </div>
+    <!-- END Content -->
+
+</div>
+<!-- END Container -->
+<script>
+
+    $(document).ready( function(){
+      $('#save').click( function(event){
+  
+      dob = document.getElementById('id_dob').value,
+      yor = document.getElementById('id_year_of_registration').value,
+  
+      $.ajax({
+          url :"{% url 'saveddata' duser.username %}",
+          type : "POST",
+          mimeType: "multipart/form-data",
+          data : { 
+  
+          'csrfmiddlewaretoken': '{{ csrf_token }}',
+          "name" :document.getElementById('id_name').value,
+          "dob" :dob,
+         
+          "gender" :document.getElementById('id_gender').value,
+          "address" :document.getElementById('id_address').value,
+          "mobile_no" :document.getElementById('id_mobile_no').value,
+          "registration_no" : document.getElementById('id_registration_no').value,
+          "year_of_registration" : yor,
+          "qualification": document.getElementById('id_qualification').value,
+          "practicinghospital" : document.getElementById('id_practicinghospital').value,
+          "bank" :document.getElementById('id_bank').value,
+          "accountno" :document.getElementById('id_accountno').value,
+          "specialization" : document.getElementById('id_specialization').value,
+          "profile_pic":document.getElementById('file').value,
+         
+          "start_time" :document.getElementById('id_start_time').value,
+          "end_time" :document.getElementById('id_end_time').value
+          
+  
+         },
+  
+          success : function(){
+            alert("new data is saved.")
+          }
+  
+      });
+  
+  
+    });
+  });
+  
+  </script>
+  <script>
+
+
+
+    
+    var r = document.getElementById("ratingr").value;
+  document.getElementById("stars").innerHTML = getStars(r);
+
+  function getStars(rating) {
+  
+    // Round to nearest half
+    rating = Math.round(rating * 2) / 2;
+    let output = [];
+  
+    // Append all the filled whole stars
+    for (var i = rating; i >= 1; i--)
+      output.push('<i class="fa fa-star" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+  
+    // If there is a half a star, append it
+    if (i == .5) output.push('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+  
+    // Fill the empty stars
+    for (let i = (5 - rating); i >= 1; i--)
+      output.push('<i class="fa fa-star-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+  
+    return output.join('');
+  
+  }
+</script>
+  <script>
+
+
+    //declearing html elements
+    
+    const imgDiv = document.querySelector('.profile-pic-div');
+    const img = document.querySelector('#photo');
+    const file = document.querySelector('#file');
+    const uploadBtn = document.querySelector('#uploadBtn');
+    
+    //if user hover on img div 
+    
+    imgDiv.addEventListener('mouseenter', function(){
+        uploadBtn.style.display = "block";
+    });
+    
+    //if we hover out from img div
+    
+    imgDiv.addEventListener('mouseleave', function(){
+        uploadBtn.style.display = "none";
+    });
+    
+    //lets work for image showing functionality when we choose an image to upload
+    
+    //when we choose a foto to upload
+    
+    file.addEventListener('change', function(){
+        //this refers to file
+        const choosedFile = this.files[0];
+    
+        if (choosedFile) {
+    
+            const reader = new FileReader(); //FileReader is a predefined function of JS
+    
+            reader.addEventListener('load', function(){
+                img.setAttribute('src', reader.result);
+            });
+    
+            reader.readAsDataURL(choosedFile);
+    
+          
+        }
+    });
+    
+        </script>
+
+{% endblock %}
+{% comment %} "profile_pic":document.getElementById('id_profile_pic').value, {% endcomment %}

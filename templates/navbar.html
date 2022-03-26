@@ -1,0 +1,262 @@
+﻿{% comment %} {% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"> 
+
+
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+
+    <!-- Bootstrap CSS -->
+      <!-- Load Bootstrap -->
+      <link rel="stylesheet"
+      href=
+"https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+      integrity=
+"sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I"
+      crossorigin="anonymous" />
+<script src=
+"https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity=
+"sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous">
+</script>
+<script src=
+"https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+        integrity=
+"sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+        crossorigin="anonymous">
+</script>
+  
+    <script src="{% static 'jquery.js' %}"></script>
+    
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+		
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/4.5.6/css/ionicons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'homepage/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+   <title>AHPS</title>
+   
+ 
+  </head>
+
+
+  <body>
+
+
+
+      <div class="container-fluid">
+
+       
+      
+      
+          <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1b405a;">
+              <a class="navbar-brand" href="{% url 'home' %}"><i class="fa fa-heartbeat" aria-hidden="true"></i>ADVANCED HEALTH PREDICTION SYSTEM </a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+          <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav ml-auto">
+                    
+                      <li class="nav-item">
+                          <a class="nav-link" href="{% url 'home' %}"><i class="fa fa-home" aria-hidden="true"> Home</i></a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="{% url 'home' %}"><i class="fa fa-info-circle" aria-hidden="true"> About Us</i></a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="{% url 'contactus' %}"><i class="fa fa-envelope" aria-hidden="true"> Contact</i></a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}"><i class="fa fa-hospital-o" aria-hidden="true"> Hospital</i></a>
+                      </li>
+
+      
+                    {% if user.is_authenticated %}
+                      
+                      {% if user.patient %}
+      
+                      <li class="nav-item">   
+                                <div class="collapse navbar-collapse" >
+                                  <ul class="navbar-nav">
+                                      <li class="nav-item dropdown">
+                                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                       Hello,
+                                        <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="30" height="30" class="rounded-circle">
+                                        {{user.patient.name}}
+
+                                      </a>
+                                      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <a class="dropdown-item" href="{% url 'patient_ui' %}"><i class="fa fa-user" aria-hidden="true"> Dashboard</i></a>
+                                        <a class="dropdown-item" href="{% url 'pviewprofile' user.patient.name %}"><i class="fa fa-cogs" aria-hidden="true"> Edit Profile</i></a>
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logout-modal">
+                                          <i class="fa fa-sign-out" aria-hidden="true"> Log Out</i></a>
+                                      </div>
+                                    </li>   
+                                  </ul>
+                                </div>
+                      </li>
+                      <div class="modal fade" id="logout-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-sm">
+                          <div class="modal-content">
+                            <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
+                            <div class="modal-body"><i class="fa fa-question-circle"></i><span style="color: rgb(42, 187, 6);">{{user.patient.name}}</span>, Are you sure you want to log-off?</div>
+                            <div class="modal-footer"><a href="{% url 'logout' %}" class="btn btn-primary btn-block">Logout</a></div>
+                          </div>
+                        </div>
+                      </div>
+                    
+      
+                      {% endif %}
+                      
+                      {% if user.doctor  %}
+
+                      <li class="nav-item">
+
+
+                      
+ 
+ 
+                        <div class="collapse navbar-collapse" >
+                          <ul class="navbar-nav">
+                              <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               Hello,
+                                <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="30" height="30" class="rounded-circle">
+                                Dr. {{user.doctor.name}}
+                             
+                              </a>
+                              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="{% url 'doctor_ui' %}"><i class="fa fa-user" aria-hidden="true"> Dashboard</i></a>
+                                <a class="dropdown-item" href="{% url 'dviewprofile' user.doctor.name %}"><i class="fa fa-cogs" aria-hidden="true"> Edit Profile</i></a>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logout-modal">
+                                  <i class="fa fa-sign-out" aria-hidden="true"> Log Out</i></a>
+                              </div>
+                            </li>   
+                          </ul>
+                        </div>
+              </li>
+              <div class="modal fade" id="logout-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                  <div class="modal-content">
+                    <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
+                    <div class="modal-body"><i class="fa fa-question-circle"></i><span style="color: rgb(42, 187, 6);">{{user.doctor.name}}</span>, Are you sure you want to log-off?</div>
+                    <div class="modal-footer"><a href="{% url 'logout' %}" class="btn btn-primary btn-block">Logout</a></div>
+                  </div>
+                </div>
+              </div>
+      
+      
+                      {% endif %}
+
+                      {% if user.is_superuser  %}
+      
+
+                      <li class="nav-item">
+                        <div class="collapse navbar-collapse" >
+                          <ul class="navbar-nav">
+                              <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               Hello, Admin
+                                <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="30" height="30" class="rounded-circle">
+                                {{user.username}}
+                             
+                              </a>
+                              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="{% url 'admin_ui' %}"><i class="fa fa-user" aria-hidden="true"> Dashboard</i></a>
+                               
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logout-modal">
+                                  <i class="fa fa-sign-out" aria-hidden="true"> Log Out</i></a>
+                              </div>
+                            </li>   
+                          </ul>
+                        </div>
+                      </li>
+
+ 
+                  <div class="modal fade" id="logout-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                      <div class="modal-content">
+                        <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
+                        <div class="modal-body"><i class="fa fa-question-circle"></i><span style="color: rgb(42, 187, 6);">{{user.username}}</span>, Are you sure you want to log-off?</div>
+                        <div class="modal-footer"><a href="{% url 'logout' %}" class="btn btn-primary btn-block">Logout</a></div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endif %}
+                 
+                      {% else %}    
+                      <li class="nav-item">
+                        <div class="collapse navbar-collapse" >
+                          <ul class="navbar-nav">
+                              <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              
+                                <i class="fa fa-user-plus" aria-hidden="true"> Register</i>
+
+                              </a>
+                              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                              
+                                <a class="dropdown-item" href="{% url 'signup_doctor' %}"> <i class="fa fa-user-md" aria-hidden="true"> Doctor</i></a>
+                                <a class="dropdown-item" href="{% url 'signup_patient' %}"> <i class="fa fa-user" aria-hidden="true"> Patient</i> </a>
+                              </div>
+                            </li>   
+                          </ul>
+                        </div>
+                    </li>
+                        <li class="nav-item">
+                            <div class="collapse navbar-collapse" >
+                              <ul class="navbar-nav">
+                                  <li class="nav-item dropdown">
+                                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  
+                                    <i class="fa fa-sign-in" aria-hidden="true"> Login</i>
+
+                                  </a>
+                                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" href="{% url 'sign_in_admin' %}"> <i class="fa fa-user-secret" aria-hidden="true"> Admin</i></a>
+                                    <a class="dropdown-item" href="{% url 'sign_in_doctor' %}"> <i class="fa fa-user-md" aria-hidden="true"> Doctor</i></a>
+                                    <a class="dropdown-item" href="{% url 'sign_in_patient' %}"> <i class="fa fa-user" aria-hidden="true"> Patient</i> </a>
+                                  </div>
+                                </li>   
+                              </ul>
+                            </div>
+                        </li>      
+                      {% endif %}
+      
+                  </ul>
+              </div>
+          </nav>
+        </div>
+
+  {% block body %}
+
+  {% endblock %}
+
+
+
+
+
+
+
+
+   <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+   
+    <script src="https://code.jquery.com/jquery-3.4.1.js"integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="crossorigin="anonymous"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+ 
+
+
+</body>
+</html> {% endcomment %}

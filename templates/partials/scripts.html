@@ -1,0 +1,91 @@
+{% load static %}
+<script src="{% static '' %}static/js/jquery-2.2.3.min.js"></script>
+	<!-- Default-JavaScript-File -->
+
+	<!-- banner slider -->
+	<script src="{% static '' %}static/js/responsiveslides.min.js"></script>
+	<script>
+		$(function () {
+			$("#slider4").responsiveSlides({
+				auto: true,
+				pager: true,
+				nav: true,
+				speed: 1000,
+				namespace: "callbacks",
+				before: function () {
+					$('.events').append("<li>before event fired.</li>");
+				},
+				after: function () {
+					$('.events').append("<li>after event fired.</li>");
+				}
+			});
+		});
+		
+    
+
+		
+		}
+//rating ko laagi
+		<script>
+			var r = document.getElementById("ratingr").value;
+			document.getElementById("stars").innerHTML = getStars(r);
+		  
+			function getStars(rating) {
+			
+			  // Round to nearest half
+			  rating = Math.round(rating * 2) / 2;
+			  let output = [];
+			
+			  // Append all the filled whole stars
+			  for (var i = rating; i >= 1; i--)
+				output.push('<i class="fa fa-star" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+			
+			  // If there is a half a star, append it
+			  if (i == .5) output.push('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+			
+			  // Fill the empty stars
+			  for (let i = (5 - rating); i >= 1; i--)
+				output.push('<i class="fa fa-star-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+			
+			  return output.join('');
+
+
+		</script>
+
+	</script>
+	<!-- //banner slider -->
+
+	<!-- fixed navigation -->
+	<script src="{% static '' %}static/js/fixed-nav.js"></script>
+	<!-- //fixed navigation -->
+
+	<!-- smooth scrolling -->
+	<script src="{% static '' %}static/js/SmoothScroll.min.js"></script>
+	<!-- move-top -->
+	<script src="{% static '' %}static/js/move-top.js"></script>
+	<!-- easing -->
+	<script src="{% static '' %}static/js/easing.js"></script>
+	<!--  necessary snippets for few javascript files -->
+	<script src="{% static '' %}static/js/medic.js"></script>
+
+	<script src="{% static '' %}static/js/bootstrap.js"></script>
+	<!-- Necessary-JavaScript-File-For-Bootstrap -->
+
+	
+	
+	
+	<!-- //Js files -->
+	<script type="text/javascript">
+		
+		(function(d, m){
+			var kommunicateSettings = 
+				{"appId":"1f8ace2efae74e19841b3d4c38953d388","popupWidget":true,"automaticChatOpenOnNavigation":true,"oneTimeRating": true};
+			var s = document.createElement("script"); s.type = "text/javascript"; s.async = true;
+			s.src = "https://widget.kommunicate.io/v2/kommunicate.app";
+			var h = document.getElementsByTagName("head")[0]; h.appendChild(s);
+
+			window.kommunicate = m; m._globals = kommunicateSettings;
+		})(document, window.kommunicate || {});
+	/* NOTE : Use web server to view HTML files as real-time update will not work if you directly open the HTML file in the browser. */
+	</script>
+	

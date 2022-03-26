@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+
+ 
+    {% block content %}
+
+
+	
+
+
+	<!-- team -->
+	<section class="team py-5">
+		<div class="container py-xl-5 py-lg-3">
+			<div class="w3ls-titles text-center mb-5">
+				<h3 class="title">Doctors Team</h3>
+				
+				<form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method="GET">
+					<input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search Doctor" aria-label="Search" required>
+					<button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
+					</form>
+				
+				<span>
+					<i class="fas fa-user-md"></i>
+				</span>
+			</div>
+
+			</div>
+			<div class="row inner-sec-w3layouts-agileinfo">
+        {% for i in dobj %}
+				<div class="col-md-4 team-grids text-center mb-5">
+{% if i.profile_pic %}
+
+<img src="{{ i.profile_pic.url }}" alt="Profile Picture" style="height: 400px; width: 400px;" class="img-fluid" alt=""/>
+{% else %}
+<img 
+	 src="{% static 'homepage/doctor.png' %}"
+	
+	 style="height: 400px; width: 400px;" class="img-fluid" alt="">
+{% endif %}
+
+<span id="stars"></span> 
+
+
+
+
+
+
+
+
+
+
+
+
+					<div class="team-info">
+                    
+						<div class="caption">
+							<h4>
+                {{i.name}}
+							</h4>
+						</div>
+
+                        <h6>{{i.specialization}} Expert<span id="stars"></span> </h6>
+                        <h6>{{ i.qualification }}</h6>
+                        <h6>{{ i.user.email}}</h6>
+                        {% comment %} <h6>{{ i.rating}}</h6> {% endcomment %}
+                        <h6>Available {{ i.start_time }} to {{ i.end_time }}
+                            in {{ i.practicinghospital }}</h6>
+                        <h6>
+							Rating: <span id="stars"></span> 
+							{% if i.rating|floatformat:2 == "0.00" %}
+							
+							<span style="color:red;" name="rating" id="ratingra">Oops!!No Rating Yet.</span> 
+							{% else %}
+						<span style="color:red;" name="rating" id="ratingra">{{i.rating|floatformat:2 }}</span>      
+               {% endif %}
+						
+						<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+							
+                            {% comment %} <form action="{% url 'make_consultation' i.user.username %}" method="POST">
+                              {% csrf_token %} 
+                               <button type="submit" class="btn btn-primary">Take a Consult Time</button>  
+                            </form> {% endcomment %}
+                       </h6>
+                       <h6> <form action="{% url 'dviewprofilep' i.user.username %}" method="GET">
+                        {% csrf_token %} 
+                         <button type="submit" class="btn btn-primary">view profile</button>  
+                      </form>
+                    </h6>        
+                      
+                
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+	<script>
+
+
+
+    
+		var r = document.getElementById("ratingra").value;
+	  document.getElementById("stars").innerHTML = getStars(r);
+	
+	  function getStars(rating) {
+	  
+		// Round to nearest half
+		rating = Math.round(rating * 2) / 2;
+		let output = [];
+	  
+		// Append all the filled whole stars
+		for (var i = rating; i >= 1; i--)
+		  output.push('<i class="fa fa-star" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+	  
+		// If there is a half a star, append it
+		if (i == .5) output.push('<i class="fa fa-star-half-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+	  
+		// Fill the empty stars
+		for (let i = (5 - rating); i >= 1; i--)
+		  output.push('<i class="fa fa-star-o" aria-hidden="true" style="color: gold;"></i>&nbsp;');
+	  
+		return output.join('');
+	  
+	  }
+	</script>
+
+{% endblock %}
+
+
+
+
+
+  
+

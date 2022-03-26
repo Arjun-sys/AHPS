@@ -1,0 +1,1008 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <link rel="stylesheet"
+          type="text/css"
+          href="{% static 'patient/checkdisease/dps.css' %}">
+    <style>
+ 
+.progress {
+    width: 150px;
+    height: 150px !important;
+    float: left;
+    line-height: 150px;
+    background: none;
+    margin: 20px;
+    box-shadow: none;
+    position: relative
+}
+
+.progress:after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 12px solid #fff;
+    position: absolute;
+    top: 0;
+    left: 0
+}
+
+.progress>span {
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    z-index: 1
+}
+
+.progress .progress-left {
+    left: 0
+}
+
+.progress .progress-bar {
+    width: 100%;
+    height: 100%;
+    background: none;
+    border-width: 12px;
+    border-style: solid;
+    position: absolute;
+    top: 0
+}
+
+.progress .progress-left .progress-bar {
+    left: 100%;
+    border-top-right-radius: 80px;
+    border-bottom-right-radius: 80px;
+    border-left: 0;
+    -webkit-transform-origin: center left;
+    transform-origin: center left
+}
+
+.progress .progress-right {
+    right: 0
+}
+
+.progress .progress-right .progress-bar {
+    left: -100%;
+    border-top-left-radius: 80px;
+    border-bottom-left-radius: 80px;
+    border-right: 0;
+    -webkit-transform-origin: center right;
+    transform-origin: center right;
+    animation: loading-1 1.8s linear forwards
+}
+
+.progress .progress-value {
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
+    background: #000;
+    font-size: 24px;
+    color: #fff;
+    line-height: 135px;
+    text-align: center;
+    position: absolute;
+    top: 5%;
+    left: 5%
+}
+
+.progress.blue .progress-bar {
+    border-color: #049dff
+}
+
+.progress.blue .progress-left .progress-bar {
+    animation: loading-2 1.5s linear forwards 1.8s
+}
+
+.progress.yellow .progress-bar {
+    border-color: #fdba04
+}
+
+.progress.yellow .progress-right .progress-bar {
+    animation: loading-3 1.8s linear forwards
+}
+
+.progress.yellow .progress-left .progress-bar {
+    animation: none
+}
+
+@keyframes loading-1 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg)
+    }
+
+    100% {
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg)
+    }
+}
+
+@keyframes loading-2 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg)
+    }
+
+    100% {
+        -webkit-transform: rotate(144deg);
+        transform: rotate(144deg)
+    }
+}
+
+@keyframes loading-3 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg)
+    }
+
+    100% {
+        -webkit-transform: rotate(135deg);
+        transform: rotate(135deg)
+    }
+}
+ 
+    </style>
+    <script>
+
+  /* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function Functionshow() {
+  
+  document.getElementById("searchbar").value = '';
+  document.getElementById("myDropdown").classList.toggle("show");
+   search_symptoms();
+  
+}
+
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.btn')) {
+    if (!event.target.matches('.searchbardiv')){
+      if (!event.target.matches('.searchbar')){
+
+    var dropdowns = document.getElementsByClassName("");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+}
+}
+
+  function Functionsymptoms(name) {
+    var newItem = document.createElement("TEXTAREA");
+    newItem.innerText = name;
+    newItem.setAttribute("id","symptoms");
+    
+    newItem.setAttribute("class","symptoms");
+    document.getElementById("sympbox").appendChild(newItem);
+    
+  }
+
+ 
+  //var elements = document.getElementsByClassName("symptoms");
+
+
+  function search_symptoms() { 
+    let input = document.getElementById('searchbar').value 
+    input=input.toLowerCase(); 
+    let x = document.getElementsByClassName('dropdown-item'); 
+      
+    for (i = 0; i < x.length; i++) {  
+        if (!x[i].innerHTML.toLowerCase().includes(input)) { 
+            x[i].style.display="none"; 
+        } 
+        else { 
+            x[i].style.display="inline-block";                  
+        } 
+    } 
+} 5
+
+
+$(document).ready( function(){
+
+
+$("#predict").click(function () {
+  event.preventDefault();
+
+  var symptoms = document.getElementsByClassName("symptoms");
+  var noofsym = symptoms.length;
+  var symlist=[];
+
+  if(noofsym == 0){
+     alert(" Please select symptoms ");
+  }
+  else if(noofsym <3)
+  {
+    alert(" Please  select at least 3 symptoms ");
+ }
+
+  else {
+
+  for(i=0;i<symptoms.length;i++){
+    symlist[i]=symptoms[i].value;
+  }
+  
+
+
+  $("#resultdiv").show("slow");
+  $('html,body').animate({
+    scrollTop: $("#resultdiv").offset().top},
+    'slow');
+       
+
+
+
+  $.ajax({
+      url: 'checkdisease',
+      type: "POST",
+      data: { "noofsym" : noofsym,
+              "symptoms" :symlist,
+              csrfmiddlewaretoken : $('input[name=csrfmiddlewaretoken]').val()
+      },
+      dataType: 'json',
+      success: function (data) {
+        document.getElementById('diseasefield').innerText = data["predicteddisease"];
+    
+        document.getElementById('percentage').innerText = data["confidencescore"]+"%";
+        percent=data["confidencescore"];
+        
+        disease=data["predicteddisease"];
+        hospital1=data["consulthospital1"];
+        hospital2=data["consulthospital2"];
+        hospital3=data["consulthospital3"];
+        hospital4=data["consulthospital4"];
+        hospital5=data["consulthospital5"];
+        
+        if(disease == "GERD")
+        {
+          
+          precaution=["Avoid fatty spicy food", "Avoid lying down after eating", "Maintain healthy weight" ,"Exercise"];
+          description="Gastroesophageal reflux disease, or GERD, is a digestive disorder that affects the lower esophageal sphincter (LES), the ring of muscle between the esophagus and stomach. Many people, including pregnant women, suffer from heartburn or acid indigestion caused by GERD."
+          var listOfPrecautions= [];
+          document.getElementById('description').innerText =description;
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Drug Reaction")
+        {
+          description="An adverse drug reaction (ADR) is an injury caused by taking medication. ADRs may occur following a single dose or prolonged administration of a drug or result from the combination of two or more drugs."
+          document.getElementById('description').innerText =description;
+          precaution=["stop irritation","consult nearest hospital","stop taking drug","follow up"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Malaria")
+        {
+          description="An infectious disease caused by protozoan parasites from the Plasmodium family that can be transmitted by the bite of the Anopheles mosquito or by a contaminated needle or transfusion. Falciparum malaria is the most deadly type."
+          document.getElementById('description').innerText =description;
+          precaution=["consult nearest hospital", "avoid oily food", "avoid non veg food" ,"keep mosquitos out"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Allergy")
+        {
+          description="An allergy is an immune system response to a foreign substance that's not typically harmful to your body.They can include certain foods, pollen, or pet dander. Your immune system's job is to keep you healthy by fighting harmful pathogens."
+          document.getElementById('description').innerText =description;
+          precaution=["apply calamine", "cover area with bandage", "use ice to compress itching"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Hypothyroidism")
+        {
+          description="Hypothyroidism, also called underactive thyroid or low thyroid, is a disorder of the endocrine system in which the thyroid gland does not produce enough thyroid hormone."
+          document.getElementById('description').innerText =description;
+          precaution=["reduce stress", "exercise", "eat healthy" ,"get proper sleep"];
+          var listOfPrecautions= [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Psoriasis")
+        {
+          description="Psoriasis is a common skin disorder that forms thick, red, bumpy patches covered with silvery scales. They can pop up anywhere, but most appear on the scalp, elbows, knees, and lower back. Psoriasis can't be passed from person to person. It does sometimes happen in members of the same family."
+          document.getElementById('description').innerText =description;
+          precaution=["wash hand with warm soapy water", "stop bleeding using pressure", "consult doctor" ,"salt baths"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Chronic cholestasis")
+        {
+          description="Chronic cholestatic diseases, whether occurring in infancy, childhood or adulthood, are characterized by defective bile acid transport from the liver to the intestine, which is caused by primary damage to the biliary epithelium in most cases."
+          document.getElementById('description').innerText =description;
+          precaution=["cold baths", "anti itch medicine", "consult doctor" ,"eat healthy"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Hepatitis A")
+        {
+          description="Hepatitis A is a highly contagious liver infection caused by the hepatitis A virus. The virus is one of several types of hepatitis viruses that cause inflammation and affect your liver's ability to function."
+          document.getElementById('description').innerText =description;
+          precaution=["consult nearest hospital", "wash hands through", "avoid fatty spicy food" ,"medication"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Osteoarthristis")
+        {
+          description="Osteoarthritis is the most common form of arthritis, affecting millions of people worldwide. It occurs when the protective cartilage that cushions the ends of your bones wears down over time."
+          document.getElementById('description').innerText =description;
+          precaution=["acetaminophen", "consult nearest hospital", "follow up" ,"salt baths"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Paroymsal")
+        {
+          description="Benign paroxysmal positional vertigo (BPPV) is one of the most common causes of vertigo, the sudden sensation that you're spinning or that the inside of your head is spinning. Benign paroxysmal positional vertigo causes brief episodes of mild to intense dizziness."
+          document.getElementById('description').innerText =description;
+          precaution=["lie down", "avoid sudden change in body", "avoid abrupt head movement" ,"relax"];
+          var listOfPrecautions= [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Hypoglycemia")
+        {
+          description=" Hypoglycemia is a condition in which your blood sugar (glucose) level is lower than normal. Glucose is your body's main energy source. Hypoglycemia is often related to diabetes treatment. But other drugs and a variety of conditions & many rare cases can cause low blood sugar in people who don't have diabetes."
+          document.getElementById('description').innerText =description;
+          precaution=["lie down on side", "check in pulse", "drink sugary drinks" ,"consult doctor"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Acne")
+        {
+          description="Acne vulgaris is the formation of comedones, papules, pustules, nodules, and/or cysts as a result of obstruction and inflammation of pilosebaceous units (hair follicles and their accompanying sebaceous gland). Acne develops on the face and upper trunk. It most often affects adolescents."
+          document.getElementById('description').innerText =description;
+          precaution=["Bath twice", "avoid fatty spicy food", "drink plenty of water" ,"avoid too many products"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Diabetes")
+        {
+          description="Diabetes is a disease that occurs when your blood glucose, also called blood sugar, is too high. Blood glucose is your main source of energy and comes from the food you eat. Insulin, a hormone made by the pancreas, helps glucose from food get into your cells to be used for energy"
+          document.getElementById('description').innerText =description;
+          precaution=["have balanced diet", "exercise", "consult doctor" ,"follow up"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Impetigo")
+        {
+          description="Impetigo (im-puh-TIE-go) is a common and highly contagious skin infection that mainly affects infants and children. Impetigo usually appears as red sores on the face, especially around a child's nose and mouth, and on hands and feet. The sores burst and develop honey-colored crusts."
+          document.getElementById('description').innerText =description;
+          precaution=["soak affected area in warm water", "use antibiotics", "remove scabs with wet compressed cloth" ,"consult doctor"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Hypertension")
+        {
+          description="Hypertension (HTN or HT), also known as high blood pressure (HBP), is a long-term medical condition in which the blood pressure in the arteries is persistently elevated. High blood pressure typically does not cause symptoms."
+          document.getElementById('description').innerText =description;
+          precaution=["meditation", "salt bath", "reduce stress" ,"get proper sleep"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Peptic ulcer diseae")
+        {
+          description="Peptic ulcer disease (PUD) is a break in the inner lining of the stomach, the first part of the small intestine, or sometimes the lower esophagus. An ulcer in the stomach is called a gastric ulcer, while one in the first part of the intestines is a duodenal ulcer."
+          document.getElementById('description').innerText =description;
+          precaution=["avoid fatty spicy food ", "consume probiotic food", "eliminate milk" ,"limit alcohol"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Dimorphic hemmorhoids")
+        {
+          description="Hemorrhoids, also spelled haemorrhoids, are vascular structures in the anal canal. In their ... Other names, Haemorrhoids, piles, hemorrhoidal disease ."
+          document.getElementById('description').innerText =description;
+          precaution=["avoid fatty spicy food", "consume witch hazel", "warm bath with epsom salt" ,"consume aelovera juice"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Common cold")
+        {
+          description="The common cold is a viral infection of your nose and throat (upper respiratory tract). It's usually harmless, although it might not feel that way. Many types of viruses can cause a common cold."
+          document.getElementById('description').innerText =description;
+          precaution=["drink vitamin c rich drink", "take vapour", "avoid cold food" ,"keep fever in check"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Chicken pox")
+        {
+          description="Chickenpox is a highly contagious disease caused by the varicella-zoster virus (VZV). It can cause an itchy, blister-like rash. The rash first appears on the chest, back, and face, and then spreads over the entire body, causing between 250 and 500 itchy blisters."
+          document.getElementById('description').innerText =description;
+          precaution=["use neem in bathing", "consume neem leaves", "take vaccine" ,"avoid public places"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Cervical spondylosis")
+        {
+          description="Cervical spondylosis is a general term for age-related wear and tear affecting the spinal disks in your neck. As the disks dehydrate and shrink, signs of osteoarthritis develop, including bony projections along the edges of bones (bone spurs)."
+          document.getElementById('description').innerText =description;
+          precaution=["use heating pad or cold packs", "exercise", "take otc pain reliver" ,"consult doctor"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Hyperthyroidism")
+        {
+          description="Hyperthyroidism (overactive thyroid) occurs when your thyroid gland produces too much of the hormone thyroxine. Hyperthyroidism can accelerate your body's metabolism, causing unintentional weight loss and a rapid or irregular heartbeat."
+          document.getElementById('description').innerText =description;
+          precaution=["eat healthy", "massage", "use lemon balm" ,"take radioactive iodine treatment"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Urinary tract infection")
+        {
+          description="Urinary tract infection: An infection of the kidney, ureter, bladder, or urethra. Abbreviated UTI. Not everyone with a UTI has symptoms, but common symptoms include a frequent urge to urinate and pain or burning when urinating."
+          document.getElementById('description').innerText =description;
+          precaution=["drink plenty of water", "increase vitamin c intake", "drink canberry drinks" ,"take probiotics"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Varicose veins")
+        {
+          description="A vein that has enlarged and twisted, often appearing as a bulging, blue blood vessel that is clearly visible through the skin. Varicose veins are most common in older adults, particularly women, and occur especially on the legs."
+          document.getElementById('description').innerText =description;
+          precaution=["lie down flat and raise the leg high", "use ointments", "use vein compression" ,"don't stand still for long"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="AIDS")
+        {
+          description="Acquired immunodeficiency syndrome (AIDS) is a chronic, potentially life-threatening condition caused by the human immunodeficiency virus (HIV). By damaging your immune system, HIV interferes with your body's ability to fight infection and disease."
+          document.getElementById('description').innerText =description;
+          precaution=["avoid open cuts", "wear ppe if possible", "consult doctor" ,"follow up"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Paralysis")
+        {
+          description="Intracerebral hemorrhage (ICH) is when blood suddenly bursts into brain tissue, causing damage to your brain. Symptoms usually appear suddenly during ICH. They include headache, weakness, confusion, and paralysis, particularly on one side of your body."
+          document.getElementById('description').innerText =description;
+          precaution=["massage", "eat healthy", "exercise" ,"consult doctor"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Typhoid")
+        {
+          description="An acute illness characterized by fever caused by infection with the bacterium Salmonella typhi. Typhoid fever has an insidious onset, with fever, headache, constipation, malaise, chills, and muscle pain. Diarrhea is uncommon, and vomiting is not usually severe."
+          document.getElementById('description').innerText =description;
+          precaution=["eat high calorie vegetable", "antibiotic therapy", "consult doctor" ,"medication"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Hepatitis B")
+        {
+          description="Hepatitis B is an infection of your liver. It can cause scarring of the organ, liver failure, and cancer. It can be fatal if it isn't treated. It's spread when people come in contact with the blood, open sores, or body fluids of someone who has the hepatitis B virus."
+          document.getElementById('description').innerText =description;
+          precaution=["consult nearest hospital", "vaccination", "eat healthy" ,"medication"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Fungal infection")
+        {
+          description="In humans, fungal infections occur when an invading fungus takes over an area of the body and is too much for the immune system to handle. Fungi can live in the air, soil, water, and plants. There are also some fungi that live naturally in the human body. Like many microbes, there are helpful fungi and harmful fungi."
+          document.getElementById('description').innerText =description;
+          precaution=["bath twice", "use detol or neem in bathimg water", "keep infected area dry" ,"use clean cloths"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Hepatitis C")
+        {
+          description="Inflammation of the liver due to the hepatitis C virus (HCV), which is usually spread via blood transfusion (rare), hemodialysis, and needle sticks. The damage hepatitis C does to the liver can lead to cirrhosis and its complications as well as cancer."
+          document.getElementById('description').innerText =description;
+          precaution=["consult nearest hospital", "vaccination", "eat healthy" ,"medication"];
+          var listOfPrecautions= [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Migraine")
+        {
+          description="A migraine can cause severe throbbing pain or a pulsing sensation, usually on one side of the head. It's often accompanied by nausea, vomiting, and extreme sensitivity to light and sound. Migraine attacks can last for hours to days, and the pain can be so severe that it interferes with your daily activities."
+          document.getElementById('description').innerText =description;
+          precaution=["meditation", "reduce stress", "use poloroid glasses in sun" ,"consult doctor"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Bronchial Asthma")
+        {
+          description="Bronchial asthma is a medical condition which causes the airway path of the lungs to swell and narrow. Due to this swelling, the air path produces excess mucus making it hard to breathe, which results in coughing, short breath, and wheezing. The disease is chronic and interferes with daily working."
+          document.getElementById('description').innerText =description;
+          precaution=["switch to loose cloothing", "take deep breaths", "get away from tigger" ,"seek help"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Alcoholic hepatitis")
+        {
+          description="Alcoholic hepatitis is a diseased, inflammatory condition of the liver caused by heavy alcohol consumption over an extended period of time. It's also aggravated by binge drinking and ongoing alcohol use. If you develop this condition, you must stop drinking alcohol."
+          document.getElementById('description').innerText =description;
+          precaution=["stop alcohol consumption", "consult doctor", "medication" ,"follow up"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Jaundice")
+        {
+          description="Yellow staining of the skin and sclerae (the whites of the eyes) by abnormally high blood levels of the bile pigment bilirubin. The yellowing extends to other tissues and body fluids. Jaundice was once called the morbus regius (the regal disease) in the belief that only the touch of a king could cure it."
+          document.getElementById('description').innerText =description;
+          precaution=["drink plenty of water", "consume milk thistle", "eat fruits and high fiberous food" ,"medication"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Hepatitis E")
+        {
+          description="A rare form of liver inflammation caused by infection with the hepatitis E virus (HEV). It is transmitted via food or drink handled by an infected person or through infected water supplies in areas where fecal matter may get into the water. Hepatitis E does not cause chronic liver disease."
+          document.getElementById('description').innerText =description;
+          precaution=["stop alcohol consumption", "rest", "consult doctor" ,"medication"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Dengue")
+        {
+          description="An acute infectious disease caused by a flavivirus (species Dengue virus of the genus Flavivirus), transmitted by aedes mosquitoes, and characterized by headache, severe joint pain, and a rash. And also called  breakbone fever, dengue fever."
+          document.getElementById('description').innerText =description;
+          precaution=["drink papaya leaf juice", "avoid fatty spicy food", "keep mosquitos away" ,"keep hydrated"];
+          var listOfPrecautions= [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Hepatitis D")
+        {
+          description="Hepatitis D, also known as the hepatitis delta virus, is an infection that causes the liver to become inflamed. This swelling can impair liver function and cause long-term liver problems, including liver scarring and cancer. The condition is caused by the hepatitis D virus (HDV)."
+          document.getElementById('description').innerText =description; 
+          precaution=["consult doctor", "medication", "eat healthy" ,"follow up"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Heart attack")
+        {
+          description="The death of heart muscle due to the loss of blood supply. The loss of blood supply is usually caused by a complete blockage of a coronary artery, one of the arteries that supplies blood to the heart muscle."
+          document.getElementById('description').innerText =description;
+          precaution=["call ambulance", "chew or swallow aspirin", "keep clam"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Pneumonia")
+        {
+          description="Pneumonia is an infection in one or both lungs. Bacteria, viruses, and fungi cause it. The infection causes inflammation in the air sacs in your lungs, which are called alveoli. The alveoli fill with fluid or pus, making it difficult to breathe."
+          document.getElementById('description').innerText =description;
+          precaution=["consult doctor", "medication", "rest" ,"follow up"];
+          var listOfPrecautions= [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Arthritis")
+        {
+          description="Arthritis is the swelling and tenderness of one or more of your joints. The main symptoms of arthritis are joint pain and stiffness, which typically worsen with age. The most common types of arthritis are osteoarthritis and rheumatoid arthritis."
+          document.getElementById('description').innerText =description;
+          precaution=["exercise", "use hot and cold therapy", "try acupunture" ,"message"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Gastroenteritis")
+        {
+          description="Gastroenteritis is an inflammation of the digestive tract, particularly the stomach, and large and small intestines. Viral and bacterial gastroenteritis are intestinal infections associated with symptoms of diarrhea , abdominal cramps, nausea , and vomiting ."
+          document.getElementById('description').innerText =description;
+          precaution=["stop eating solid food for while", "try small sips of water", "rest" ,"ease back into eating"];
+          var listOfPrecautions= [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+        if(disease=="Tuberculosis")
+        {
+          description="Tuberculosis (TB) is an infectious disease usually caused by Mycobacterium tuberculosis (MTB) bacteria. Tuberculosis generally affects the lungs, but can also affect other parts of the body. Most infections show no symptoms, in which case it is known as latent tuberculosis."
+          document.getElementById('description').innerText =description;
+          precaution=["cover mouth", "consult doctor", "medication" ,"rest"];
+          var listOfPrecautions = [];
+          document.getElementById('precaution').innerText =precaution;
+          precaution.forEach(function(element) {
+            listOfPrecautions.push("<li>" + element + "</li>");
+          });
+          list1.innerHTML = listOfPrecautions.join('');
+        }
+
+        
+        $('#percentage').css('width', percent + "%");
+        document.getElementById('diseasesearch').innerText = data["predicteddisease"];
+        $("#href").attr("href","https://www.google.com/search?q="+ disease +"");
+
+
+
+        document.getElementById('consultdoctor').innerText = data["consultdoctor"];
+  
+        
+        
+        document.getElementById('hospitalsearch1').innerText = data["consulthospital1"];
+        $("#href1").attr("href","https://www.google.com/search?q="+hospital1+"");
+        document.getElementById('hospitalsearch2').innerText = data["consulthospital2"];
+        $("#href2").attr("href","https://www.google.com/search?q="+hospital2+"");
+        document.getElementById('hospitalsearch3').innerText = data["consulthospital3"];
+        $("#href3").attr("href","https://www.google.com/search?q="+hospital3+"");
+        document.getElementById('hospitalsearch4').innerText = data["consulthospital4"];
+        $("#href4").attr("href","https://www.google.com/search?q="+hospital4+"");
+        document.getElementById('hospitalsearch5').innerText = data["consulthospital5"];
+        $("#href5").attr("href","https://www.google.com/search?q="+hospital5+"");
+      }
+      
+    });
+
+  }
+
+  });
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+    <div class="container">
+        <div class="container" style="margin-top:100px;">
+            <br>
+            <div class="text-center">
+                <h3>
+                    Please select the symptoms from the below box for predicting disease you may have been suffering from!!!
+                </h3>
+                <br>
+                <button onclick="Functionshow()" class="btn btn-primary dropdown-toggle">
+                    Select Symptoms
+                </button>
+            </div>
+        </div >
+        <div id="myDropdown" class="drop-content">
+            <div id="searchbardiv" class="searchbardiv">
+                <input id="searchbar"
+                       class="searchbar"
+                       onkeyup="search_symptoms()"
+                       type="text"
+                       name="search"
+                       placeholder=" Search symptoms.. ">
+                <br>
+            </div>
+            <div class="container" id="container-dropdown">
+                {% for i in list2 %}<a class="dropdown-item" onclick="Functionsymptoms(this.textContent)">{{i }}<input type="checkbox" name="Samples" value="{{i}}"></a>{% endfor %}
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="text-center">
+            <div class="card" id= "symptoms-box">
+                {% csrf_token %}
+                <div class="card-header">
+                   List of  Selected Symptoms
+                </div>
+             <div class="card-body" id="sympbox">
+                    {{ forloop.counter }}
+                </div>
+                <br>
+                <div class="card-footer">
+                    <button id="predict" class="btn btn-success">
+                       Predict
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div id="resultdiv" style="display: none;">
+        <div class="text-center">
+            <div class="card" id="predicted-data">
+                {% comment %} <div>
+                            <span class="diseasefield">Patient name : {{ user.patient.name }}</span>
+                            <span class="diseasefield">&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Age : {{ user.patient.age }} </span>
+                    </div>
+                {{disease}} {% endcomment %}
+                <span class="diseasefield">😢😢😢You may have been suffering from </span><span class="diseasefield"
+      id="diseasefield"
+      style="color: #092700;
+             text-shadow: 2px 2px 4px rgb(36, 255, 45);"></span>
+                <br>
+                
+                   
+                <br>
+                <span class="diseasefield">The Confidence score is <span id="percentage"></span>  </span>
+                {% comment %} <span>
+                    <div class="progress" style="display: inline-block;width:140px">
+                        <div id="percentage" class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 0%">0%</div>
+                    </div>                        
+                </span> {% endcomment %}
+                <p style="color:red">
+                    Note:This is disease prediction system based on SVM for educational purpose, please consult with doctor for better result..
+                </p>
+            </div>
+        </div>
+        <div class="card text-center">
+            <div class="card-header">
+                <span id="diseasesearch" style="color: crimson;"></span>
+            </div>
+            <div class="card-body">
+                <h5 id="description" style="size:20px;">
+                </h5>
+                <a id="href"
+                   href="https://www.google.com/search?q=arjun"
+                   target="_blank"
+                   rel="noopener noreferrer">Click Here For More Information
+                    <span id="diseasesearch" style="color: crimson;"></span></a>
+                </div>
+                <div class="card-footer text-muted">
+                    <form action="consult_a_doctor" method="GET">
+                        {% csrf_token %}
+                        <button id="consultbtn" type="submit" class="btn btn-primary">
+                            Book the consultation with <span id="consultdoctor"  name="consultdoctor"> </span> doctor
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <style type="text/css">
+ol {
+counter-reset: li; 
+list-style: none; 
+padding: 0;
+text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+ol a {
+position: relative;
+display: block;
+padding: .4em .4em .4em 2em;
+margin: .5em 0;
+background: #DAD2CA;
+color: #444;
+text-decoration: none;
+border-radius: .3em;
+transition: .3s ease-out;
+}
+
+ol a:hover { background: #E9E4E0; }
+ol a:hover:before { transform: rotate(360deg); }
+ol a:before {
+content: counter(li);
+counter-increment: li;
+position: absolute;
+left: -1.3em;
+top: 50%;
+margin-top: -1.3em;
+background: #f9dd94;
+height: 2em;
+width: 2em;
+line-height: 2em;
+border: .3em solid #fff;
+text-align: center;
+font-weight: bold;
+border-radius: 2em;
+transition: all .3s ease-out;
+}
+
+            </style>
+            <div class="card text-center">
+                <div class="card-header">
+                    <h5 class="card-title">
+                        Suggested Hospitals
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ol>
+                        <li class="">
+                            <a id="href1"
+                               href="https://www.google.com/search?q=arjun"
+                               target="_blank"
+                               rel="noopener noreferrer">
+                                <span id="hospitalsearch1" style="color:blue;"></span></a>
+                            </li>
+                            <li class="">
+                                <a id="href2"
+                                   href="https://www.google.com/search?q=arjun"
+                                   target="_blank"
+                                   rel="noopener noreferrer">
+                                    <span id="hospitalsearch2" style="color:blue;"></span></a>
+                                </li>
+                                <li class="">
+                                    <a id="href3"
+                                       href="https://www.google.com/search?q=arjun"
+                                       target="_blank"
+                                       rel="noopener noreferrer">
+                                        <span id="hospitalsearch3" style="color:blue;"></span></a>
+                                    </li>
+                                    <li class="">
+                                        <a id="href4"
+                                           href="https://www.google.com/search?q=arjun"
+                                           target="_blank"
+                                           rel="noopener noreferrer">
+                                            <span id="hospitalsearch4" style="color:blue;"></span></a>
+                                        </li>
+                                        <li class="">
+                                            <a id="href5"
+                                               href="https://www.google.com/search?q=arjun"
+                                               target="_blank"
+                                               rel="noopener noreferrer">
+                                                <span id="hospitalsearch5" style="color:blue;"></span></a>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div class="card text-center">
+                                    <h5 class="card-header">
+                                        Precautions
+                                    </h5>
+                                    <div class="card-body">
+                                        <ul id="list1">
+                                            <li>
+                                                <p id="precaution" style="color:blue;">
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endblock %}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #myform{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h3 style="text-align: center;">You will be redirected to the esewa website..</h3>
+  
+    <form action="https://uat.esewa.com.np/epay/main" method="POST" id="myform">
+        <form action="https://uat.esewa.com.np/epay/main" method="POST">
+            
+            <input value={{consultation.amount}} name="tAmt" type="text">
+            <input value={{consultation.amount}} name="amt" type="text">
+            <input value="0" name="txAmt" type="text">
+            <input value="0" name="psc" type="text">
+            <input value="0" name="pdc" type="text">
+            <input value="EPAYTEST" name="scd" type="text">
+            <input value="{{consultation.id}}" name="pid" type="text">
+           
+            <input value="http://127.0.0.1:8000/esewa-verify/" type="hidden" name="su">
+            <input value="{{request.build_absolute_uri}}" type="hidden" name="fu">
+            <input value="Submit" type="submit">
+            </form>
+
+    <script>
+        setTimeout(function(){
+            document.getElementById("myform").submit()
+        }, 500)
+        
+    </script>
+</body>
+</html>
+{% comment %} 
+note:esewa merchant and client accountinfo
+Merchant Credentials:
+Following are the test merchant credentials to check the payment in the wallet:
+
+Username: epaytest@gmail.com
+Password: test@1234
+Merchant ID/Service Code: EPAYTEST
+
+eSewa ID & Password:
+To make payment with eSewa, one must be a registered eSewa user. For testing phase, the client/merchant can use the following eSewa id and password:
+
+eSewa ID: 9806800001/2/3/4/5
+Password: Nepal@123 {% endcomment %}
+

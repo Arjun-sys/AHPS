@@ -1,0 +1,288 @@
+{% load static %}
+ <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+{% comment %} 
+<link rel="stylesheet" href="{% static 'homepage/bootstrap/css/style.css' %}">  {% endcomment %}
+<link rel="stylesheet" href="{% static 'homepage/bootstrap/css/style10.css' %}"> 
+	<header>
+      <div class="container-fluid">
+
+          <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1b405a;">
+              <a class="navbar-brand" href="{% url 'home' %}"><i class="fa fa-heartbeat" aria-hidden="true"></i>ADVANCED HEALTH PREDICTION SYSTEM </a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+          <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav ml-auto">
+                    
+                      <li class="nav-item">
+                          <a class="nav-link" href="{% url 'home' %}"><i class="fa fa-home" aria-hidden="true"> Home</i></a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="{% url 'home' %}"><i class="fa fa-info-circle" aria-hidden="true"> About Us</i></a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="{% url 'contactus' %}"><i class="fa fa-envelope" aria-hidden="true"> Contact</i></a>
+                      </li>
+                      {% comment %} <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}"><i class="fa fa-hospital-o" aria-hidden="true"> Hospital</i></a>
+                      </li> {% endcomment %}
+                  
+      
+                    {% if user.is_authenticated %}
+                      
+                      {% if user.patient %}
+
+					  {% comment %} <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="modal" data-target="#myModal3"><i class="fa fa-hospital-o" aria-hidden="true">Notification</i></a>
+                      </li>  {% endcomment %}
+		  
+
+{% comment %} 
+					  <li class="nav-item dropdown notification-ui show">
+						<a class="nav-link dropdown-toggle notification-ui_icon" data-target="#myModal3"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="fa fa-bell"></i>
+							<span class="unread-notification"></span>
+						</a>
+						<div class="dropdown-menu notification-ui_dd show" aria-labelledby="navbarDropdown" id="myModal3">
+							<div class="notification-ui_dd-header">
+								<h3 class="text-center">Notification</h3>
+							</div>
+							<div class="notification-ui_dd-content">
+								{% for i in Feedback %}
+								<a href="#!" class="notification-list notification-list--unread text-dark">
+									<div class="notification-list_img">
+										<img src="images/users/user1.jpg" alt="user">
+									</div>
+									<div class="notification-list_detail">
+										{{i.user.doctor.name}}{{i.sender.name}}{{i.sender.user.name}}{{i.sender.user.doctor.name}}
+										<p><b>{{i.sender.username}}</b> <br><span class="text-muted">{{i.consultationDateTime}}</span></p>
+										<p class="nt-link text-truncate">{{i.feedback}}.</p>
+									</div>
+									<p><small>{{i.created}}10 mins ago</small></p>
+								</a>
+
+								{% endfor %}
+							
+							</div>
+							<div class="notification-ui_dd-footer">
+								<a href="#" class="btn btn-success btn-block">View All</a>
+							</div>
+						</div>
+					</li> {% endcomment %}
+
+
+      
+                      <li class="nav-item">   
+                                <div class="collapse navbar-collapse" >
+                                  <ul class="navbar-nav">
+                                  
+                                      <li class="nav-item dropdown">
+                                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                       {% comment %} Hello, {% endcomment %}
+                                       
+                                       {% if user.patient.profile_pic %}
+                                       <img src="{{ user.patient.profile_pic.url }}" alt="Profile Picture" width="30" height="30" class="rounded-circle"/>
+                                   {% else %}
+                                       <img
+                                            src="{% static 'homepage/patient.png' %}"
+                                            alt="Card image"
+                                            width="30" height="30" class="rounded-circle">
+                                   {% endif %}
+
+
+
+
+                                        {% comment %} <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="30" height="30" class="rounded-circle"> {% endcomment %}
+                                        {{user.patient.name}}
+
+                                      </a>
+                                      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <a class="dropdown-item" href="{% url 'patient_ui' %}"><i class="fa fa-user" aria-hidden="true"> Dashboard</i></a>
+                                        <a class="dropdown-item" href="{% url 'pviewprofile' user.patient.user.username %}"><i class="fa fa-cogs" aria-hidden="true"> Edit Profile</i></a>
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logout-modal">
+                                          <i class="fa fa-sign-out" aria-hidden="true"> Log Out</i></a>
+                                      </div>
+                                    </li>   
+                                  </ul>
+                                </div>
+                      </li>
+                      <div class="modal light" id="logout-modal" tabindex="-1" role="dialog" aria-hidden="false">
+                        <div class="modal-dialog modal-sm">
+                          <div class="modal-content">
+                            <div class="modal-header"><center><h4 style="text-align:center;">Logout <i class="fa fa-lock"></i></h4></center></div>
+                            {% if user.patient.profile_pic %}
+                            <img src="{{ user.patient.profile_pic.url }}" style="align:center;" alt="Profile Picture" width="200" height="200" class="rounded-circle"/>
+                        {% else %}
+                            <img
+                                 src="{% static 'homepage/patient.png' %}"
+                                 alt="Card image"
+                                 width="200" height="200" class="rounded-circle">
+                        {% endif %}
+                            <div class="modal-body"><i class="fa fa-question-circle"></i><span >{{user.patient.name}}</span>, Are you sure you want to log-off?</div>
+                            <div class="modal-footer"><a href="{% url 'logout' %}" class="btn btn-primary btn-block">Logout</a></div>
+                          </div>
+                        </div>
+                      </div>
+                    
+
+
+                      
+      
+                      {% endif %}
+                      
+                      {% if user.doctor  %}
+
+                      <li class="nav-item">
+
+
+                      
+ 
+ 
+                        <div class="collapse navbar-collapse" >
+                          <ul class="navbar-nav">
+                              <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               {% comment %} Hello, {% endcomment %}
+
+
+                               {% if user.doctor.profile_pic %}
+                               <img src="{{ user.doctor.profile_pic.url }}" alt="Profile Picture" width="30" height="30" class="rounded-circle"/>
+                           {% else %}
+                               <img 
+                                    src="{% static 'homepage/doctor.png' %}"
+                                   
+                                    width="30" height="30" class="rounded-circle">
+                           {% endif %}
+
+
+                                {% comment %} <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="30" height="30" class="rounded-circle"> {% endcomment %}
+                                Dr. {{user.doctor.name}}
+                             
+                              </a>
+                              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="{% url 'doctor_ui' %}"><i class="fa fa-user" aria-hidden="true"> Dashboard</i></a>
+                                <a class="dropdown-item" href="{% url 'dviewprofile' user.doctor.user.username %}"><i class="fa fa-cogs" aria-hidden="true"> Edit Profile</i></a>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logout-modal">
+                                  <i class="fa fa-sign-out" aria-hidden="true"> Log Out</i></a>
+                              </div>
+                            </li>   
+                          </ul>
+                        </div>
+              </li>
+              <div class="modal fade" id="logout-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                  <div class="modal-content">
+                    <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
+                    <div class="modal-body"><i class="fa fa-question-circle"></i><span style="color: rgb(42, 187, 6);">{{user.doctor.name}}</span>, Are you sure you want to log-off?</div>
+                    <div class="modal-footer"><a href="{% url 'logout' %}" class="btn btn-primary btn-block">Logout</a></div>
+                  </div>
+                </div>
+              </div>
+      
+      
+                      {% endif %}
+
+                      {% if user.is_superuser  %}
+      
+
+                      <li class="nav-item">
+                        <div class="collapse navbar-collapse" >
+                          <ul class="navbar-nav">
+                              <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               {% comment %} Hello, Admin {% endcomment %}
+                                <img src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/fox.jpg" width="30" height="30" class="rounded-circle">
+                                {{user.username}}
+                             
+                              </a>
+                              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="{% url 'admin_ui' %}"><i class="fa fa-user" aria-hidden="true"> Dashboard</i></a>
+                               
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logout-modal">
+                                  <i class="fa fa-sign-out" aria-hidden="true"> Log Out</i></a>
+                              </div>
+                            </li>   
+                          </ul>
+                        </div>
+                      </li>
+
+ 
+                  <div class="modal fade" id="logout-modal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                      <div class="modal-content">
+                        <div class="modal-header"><h4>Logout <i class="fa fa-lock"></i></h4></div>
+                        <div class="modal-body"><i class="fa fa-question-circle"></i><span style="color: rgb(42, 187, 6);">{{user.username}}</span>, Are you sure you want to log-off?</div>
+                        <div class="modal-footer"><a href="{% url 'logout' %}" class="btn btn-primary btn-block">Logout</a></div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endif %}
+                 
+                      {% else %}    
+                      <li class="nav-item">
+                        <div class="collapse navbar-collapse" >
+                          <ul class="navbar-nav">
+                              <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              
+                                <i class="fa fa-user-plus" aria-hidden="true"> Register</i>
+
+                              </a>
+                              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                              
+                                <a class="dropdown-item" href="{% url 'signup_doctor' %}"> <i class="fa fa-user-md" aria-hidden="true"> Doctor</i></a>
+                                <a class="dropdown-item" href="{% url 'signup_patient' %}"> <i class="fa fa-user" aria-hidden="true"> Patient</i> </a>
+                              </div>
+                            </li>   
+                          </ul>
+                        </div>
+                    </li>
+                        <li class="nav-item">
+                            <div class="collapse navbar-collapse" >
+                              <ul class="navbar-nav">
+                                  <li class="nav-item dropdown">
+                                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  
+                                    <i class="fa fa-sign-in" aria-hidden="true"> Login</i>
+
+                                  </a>
+                                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" href="{% url 'login' %}"> <i class="fa fa-user-secret" aria-hidden="true"> Master Login</i></a>
+                                    <a class="dropdown-item" href="{% url 'sign_in_admin' %}"> <i class="fa fa-user-secret" aria-hidden="true"> Admin</i></a>
+                                    <a class="dropdown-item" href="{% url 'sign_in_doctor' %}"> <i class="fa fa-user-md" aria-hidden="true"> Doctor</i></a>
+                                    <a class="dropdown-item" href="{% url 'sign_in_patient' %}"> <i class="fa fa-user" aria-hidden="true"> Patient</i> </a>
+                                  </div>
+                                </li>   
+                              </ul>
+                            </div>
+                        </li>      
+                      {% endif %}
+      
+                  </ul>
+              </div>
+          </nav>
+        </div>
+
+  {% block body %}
+
+  {% endblock %}
+
+
+
+
+
+
+
+
+   <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+   
+    <script src="https://code.jquery.com/jquery-3.4.1.js"integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="crossorigin="anonymous"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+
+</body>
+</html>
